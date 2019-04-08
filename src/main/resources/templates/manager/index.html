@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>论文管理系统</title>
+    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.css}">
+    <link th:rel="stylesheet" th:href="@{/css/page.css}" />
+    <script type="text/javascript" th:src="@{/manager/js/index.js}"></script>
+<!--    <style type="text/css">
+        .myinput{
+            border: #808080 1px solid;/* 设置输入边框的颜色粗细 */
+            font-size: 12px;/* 设置输入框中字体的大小 */
+            height: 36px;/* 设置输入框的高度 */
+            border-radius: 5px; /* 设置输入框圆角的大小 */
+            color: #000000;/* 输入框中文字的颜色 */
+            display: inline;/* 使input框在同一行信息，不会换行显示，不使用float: left;样式，应为该样式会让input框周围的其它标签样式乱掉 */
+            width: 130px
+        }
+    </style>-->
+    <!--实现左侧菜单栏伸缩功能-start-->
+    <style type="text/css">
+        *{margin: 0;padding: 0}
+        body{font-size: 12px;font-family: "宋体","微软雅黑";}
+        ul,li{list-style: none;}
+       /* .list{width: auto;border-bottom:solid 1px #316a91;margin:40px auto 0 auto;}*/
+        .list ul li{background-color:#467ca2; border:solid 1px #316a91; border-bottom:0;}
+        .list ul li a{padding-left: 10px;color: #fff; font-size:24px; display: block; font-weight:bold; height:66px;line-height: 66px;position: relative;
+        }
+        .list ul li ul{display: none;}
+        .list ul li ul li { border-left:0; border-right:0; background-color:#6196bb; border-color:#467ca2;}
+        .list ul li ul li ul{display: none;}
+        .list ul li ul li a{ padding-left:20px;}
+        .list ul li ul li ul li { background-color:#d6e6f1; border-color:#6196bb; }
+        .last{ background-color:#d6e6f1; border-color:#6196bb; }
+        .list ul li ul li ul li a{ color:#316a91; padding-left:30px;}
+
+        .list ul li ul li a img{
+            width: 23px;
+            vertical-align: middle;
+            margin-bottom: 4px;
+            margin-right: 9px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.inactive').click(function(){
+                if($(this).siblings('ul').css('display')=='none'){
+                    $(this).addClass('inactives');
+                    $(this).siblings('ul').slideDown(100).children('li');
+                }else{
+                    $(this).removeClass('inactives');
+                    $(this).siblings('ul').slideUp(100);
+                }
+            })
+        });
+    </script>
+    <!--实现左侧菜单栏伸缩功能-end-->
+</head>
+<body>
+<div class="left" style="background-color: #313541;">
+    <div class="bigTitle">论文管理系统</div>
+    <div class="list">
+        <ul class="yiji">
+            <li><a href="#" class="inactive inactives">基础信息管理</a>
+                <ul style="display: block;">
+                    <li><a onclick="pageClick(this)"><img th:src="@{/manager/img/icon-4.png}" />老师管理</a></li>
+                    <li><a onclick="pageClick(this)"><img th:src="@{/manager/img/icon-4.png}" />学生管理</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="erji" style="margin-top: -16px">
+            <li><a href="#" class="inactive">论文管理</a>
+                <ul style="display: block;">
+                    <li><a onclick="pageClick(this)"><img th:src="@{/manager/img/icon-4.png}" />论文模板管理</a></li>
+                    <li><a onclick="pageClick(this)"><img th:src="@{/manager/img/icon-4.png}" />论文管理</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="sanji" style="margin-top: -16px">
+            <li><a href="#" class="inactive">个人管理</a>
+                <ul style="display: block;">
+                    <li><a onclick="pageClick(this)"><img th:src="@{/manager/img/icon-4.png}" />个人信息管理</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="top">
+    <div class="leftTiyle" id="flTitle">老师管理</div>
+    <div class="thisUser">
+        <span>管理员登录，当前用户：[[${session.user.username}]]</span>
+        <input style="line-height: normal;margin-top: 37px;" type="button" width="100px" height="50px" onclick="exit()" value="退出登录"/>
+    </div>
+</div>
+<div class="content"></div>
+<div style="text-align:center;"></div>
+</body>
+<script type="text/javascript">
+    $(function(){
+        $(".content").load("/manager/teacherList");
+    })
+    function exit() {
+        var url = "/manager/exit";
+        window.location.href = url;
+    }
+</script>
+</html>

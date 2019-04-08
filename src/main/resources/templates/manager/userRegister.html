@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>会员卖家注册</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/body.css"/>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript">
+        //确认密码框失去焦点事件
+        //其中reform为form的name属性，password为input的name属性
+        function pwd() {
+            var password1=reform.password1.value;
+            var password2 = reform.password2.value;
+            if (password1 !=password2) {
+                $('#register').text("密码不一致")
+            }else {
+                $('#register').text("")
+            }
+        }
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <section id="content">
+        <form action="/manager/register" method="post" name="reform">
+            <h1>会员卖家注册</h1>
+            <div>
+                <input type="text" name="username" required placeholder="请输入用户名">
+            </div>
+            <div>
+                <input type="password" placeholder="请输入密码" required name="password1" id="password1">
+            </div>
+            <div>
+                <input type="password" placeholder="请再次输入密码" required name="password2" id="password2" onblur="javascript:pwd()">
+            </div>
+            <div>
+                <input id="man" type="radio" checked="checked" name="sex" value="男"/>男&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="woman" type="radio"  name="sex" value="女"/>女
+            </div>
+            <div>
+                <span th:text="${msg}" style="color: red" id="register"></span>
+            </div>
+            <div>
+                <input type="submit" value="注册">
+                <input type="submit" value="返回登陆" class="btn btn-primary"  onclick="window.open('/manager/')"/>
+            </div>
+        </form><!-- form -->
+    </section><!-- content -->
+</div>
+<br><br><br><br>
+</body>
+</html>

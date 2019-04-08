@@ -7,7 +7,7 @@ spring:
     username: root
     password: root
    # url:  jdbc:mysql://192.168.124.38:3306/clothes?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
-    url:  jdbc:mysql://localhost:3306/clothes?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    url:  jdbc:mysql://localhost:3306/thesismanager?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     type: com.alibaba.druid.pool.DruidDataSource
 
 #druid连接池配置
@@ -57,4 +57,4 @@ spring:
 #配置mybatis资源文件位置
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
-  type-aliases-package: org.lanqiao.clothes.pojo
+  type-aliases-package: org.lanqiao.thesismanager.pojo

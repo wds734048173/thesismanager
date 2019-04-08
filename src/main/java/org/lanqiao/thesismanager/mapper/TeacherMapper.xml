@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lanqiao.thesismanager.mapper.TeacherMapper">
+    <!--<insert id="insertBrand" parameterType="org.lanqiao.clothes.pojo.Brand">-->
+        <!--insert into tb_goods_brand (name,state,pic,storeId,ctime) values (#{name},#{state},#{pic},#{storeId},now())-->
+    <!--</insert>-->
+    <select id="selectTeacherListByCondition" resultType="org.lanqiao.thesismanager.pojo.Teacher" parameterType="org.lanqiao.thesismanager.pojo.Condition">
+        select * from tb_teacher
+        <where>
+            <if test="name != null &amp;&amp; name != ''">
+                and name like concat ('%', #{name}, '%')
+            </if>
+            <if test="state != -1">
+                and state=#{state}
+            </if>
+            <if test="state == -1">
+                and state!=2
+            </if>
+        </where>
+        <if test="currentPage != null">
+            limit #{currentPage}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectTeacherCountByCondition" resultType="int" parameterType="org.lanqiao.thesismanager.pojo.Condition">
+        select count(1) from tb_teacher
+        <where>
+            <if test="name != null &amp;&amp; name != ''">
+                and name like concat ('%', #{name}, '%')
+            </if>
+            <if test="state != -1">
+                and state=#{state}
+            </if>
+            <if test="state == -1">
+                and state!=2
+            </if>
+        </where>
+    </select>
+</mapper>
