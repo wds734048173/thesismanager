@@ -34,7 +34,9 @@ public class Student {
     //状态（0启用1停用2删除）
     private int state;
     private String stateStr;
+    //指导老师id
     private int tId;
+    //论文题目
     private String thesisTitle;
 
     private Date ctime;
