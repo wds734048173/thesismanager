@@ -6,4 +6,10 @@
     <select id="selectManager" resultType="org.lanqiao.thesismanager.pojo.Manager" parameterType="org.lanqiao.thesismanager.pojo.Manager">
         select * from tb_manager where username=#{username} and password=#{password}
     </select>
+    <update id="updateManager" parameterType="org.lanqiao.thesismanager.pojo.Manager">
+        update tb_manager set realname=#{realname},sex=#{sex},rtime=now(),telphone=#{telphone},email=#{email} where id=#{id}
+    </update>
+    <select id="selectManagerById" parameterType="int" resultType="org.lanqiao.thesismanager.pojo.Manager">
+        select * from tb_manager where id=#{id}
+    </select>
 </mapper>

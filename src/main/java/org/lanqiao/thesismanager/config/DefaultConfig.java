@@ -28,7 +28,7 @@ public class DefaultConfig implements WebMvcConfigurer {
         registry.addViewController("/manager/").setViewName("/manager/index");
         registry.addViewController("/manager/userInfo").setViewName("/manager/userInfo");
 
-        //教师页面
+        //学生页面
         registry.addViewController("/teacher").setViewName("/teacher/index");
         //跳转到登录页面
         registry.addViewController("/teacher/login").setViewName("/teacher/login");

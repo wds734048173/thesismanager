@@ -34,7 +34,43 @@ public class TeacherServiceImpl implements ITeacherService {
             }else if(state == 1){
                 teacher.setStateStr("停用");
             }
+            int sex = teacher.getSex();
+            if(sex == 0){
+                teacher.setSexStr("男");
+            }else{
+                teacher.setSexStr("女");
+            }
         }
         return teacherList;
+    }
+
+    @Override
+    public void addTeacher(Teacher teacher) {
+        teacherMapper.insertTeacher(teacher);
+    }
+
+    @Override
+    public Teacher getTeacher(int id) {
+        return teacherMapper.selectTeacherById(id);
+    }
+
+    @Override
+    public void modifyTeacher(Teacher teacher) {
+        teacherMapper.updateTeacher(teacher);
+    }
+
+    @Override
+    public void disableTeacherById(int id) {
+        teacherMapper.disableTeacherById(id);
+    }
+
+    @Override
+    public void enableTeacherById(int id) {
+        teacherMapper.enableTeacherById(id);
+    }
+
+    @Override
+    public void removeTeacherById(int id) {
+        teacherMapper.deleteTeacherById(id);
     }
 }

@@ -15,25 +15,19 @@ import lombok.*;
 @Builder
 public class Condition {
 
-    private String state;
-    private String grade;
-    private String name;
-    private int storeId;
-    private int brandId;
-    private int goodsClass1Id;
-    private int goodsClass2Id;
-    private int goodsClass3Id;
-    private String goodsNo;
-    private String season;
-    private int year;
-    private String no;
-    private int supplierId;
-    private int goodsId;
-    private String gradeStr;
-    private int customerId;
-
-
-
+    //状态
+    private int state;
+    //用户名
+    private String username;
+    //真实姓名
+    private String realname;
+    //学生id
+    private int sId;
+    //学生id
+    private int tId;
+    //论文类型
+    private int type;
+    //分页
     private int currentPage;
     private  int pageSize;
 

@@ -14,23 +14,47 @@
             })
             //保存
             $("#save").click(function () {
-                var teacherId = $("#teacherId").val().trim();
-                var teacherName = $("#teacherName").val().trim();
-                var teacherState = $("#teacherState option:selected").val();
-                if(teacherName.length > 20){
-                    alert("品牌名称多于20字，请重新输入");
+                //教师id
+                var teacherId = $("#teacherId").val();
+                //教师用户名
+                var username = $("#username").val().trim();
+                //教师真实名称
+                var realname = $("#realname").val().trim();
+                //教师性别
+                var sex = $("input[name='sex']:checked").val();
+                //教师联系电话
+                var telphone = $("#telphone").val().trim();
+                //教师邮箱
+                var email = $("#email").val().trim();
+                //教师状态
+                var state = $("#state option:selected").val();
+                if(username.length > 20){
+                    alert("用户名多于20字，请重新输入");
+                    return;
+                }
+                if(realname.length > 20){
+                    alert("真实名称多于20字，请重新输入");
+                    return;
+                }
+                if(!(/^1[3|4|5|8][0-9]\d{8}$/.test(telphone))){
+                    alert("手机号格式错误，请重新输入");
+                    return;
+                }
+                if(!(/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g).test(email)){
+                    alert("邮箱格式错误，请重新输入");
                     return;
                 }
                 //查询条件
-                var searchTeacherState = $("#searchTeacherState").val();
-                var searchTeacherName = $("#searchTeacherName").val().trim();
+                var searchState = $("#searchState").val();
+                var searchUserName = $("#searchUserName").val().trim();
+                var searchRealName = $("#searchRealName").val().trim();
                 var currentPage = $("#currentPage").val();
                 if(teacherId == null || teacherId == ""){
-                    var url = "/manager/addTeacher?teacherName="+teacherName+"&teacherState="+teacherState+"&method=add"
-                        +"&currentPage="+currentPage+"&searchTeacherName="+searchTeacherName+"&searchTeacherState="+searchTeacherState;
+                    var url = "/manager/addTeacher?username="+username+"&state="+state+"&realname="+realname+"&sex="+sex+"&telphone="+telphone+"&email="+email+"&method=add"
+                        +"&currentPage="+currentPage+"&searchUserName="+searchUserName+"&searchState="+searchState+"&searchRealName="+searchRealName;
                 }else{
-                    var url = "/manager/updateTeacherById?teacherId="+teacherId+"&teacherName="+teacherName+"&teacherState="+teacherState+"&method=update"
-                        +"&currentPage="+currentPage+"&searchTeacherName="+searchTeacherName+"&searchTeacherState="+searchTeacherState;
+                    var url = "/manager/updateTeacher?teacherId="+teacherId+"&username="+username+"&state="+state+"&realname="+realname+"&sex="+sex+"&telphone="+telphone+"&email="+email+"&method=update"
+                        +"&currentPage="+currentPage+"&searchUserName="+searchUserName+"&searchState="+searchState+"&searchRealName="+searchRealName;
                 }
                 $(".content").load(url);
                 $(".modal-backdrop").remove();
@@ -38,14 +62,24 @@
             //修改
             $(".updateTeacher").click(function () {
                 var id = $(this).parent().parent().children("td:eq(0)").text();
-                document.getElementById("gridSystemModalLabel").innerHTML = "修改品牌信息";
+                document.getElementById("gridSystemModalLabel").innerHTML = "修改教师信息";
                 $.ajax({
-                    url:"/manager/selectTeacherById?teacherId=" + id,
+                    url:"/manager/getTeacherById?teacherId=" + id,
                     success:function (data) {
                         var teacher = eval(data);
                         $("#teacherId").val(teacher.id);
-                        $("#teacherdName").val(teacher.name);
-                        $("#teacherState").val(teacher.state);
+                        $("#username").val(teacher.username);
+                        $("#realname").val(teacher.realname);
+                        var sexs = document.getElementsByName("sex");
+                        for(var i = 0; i < sexs.length; i++){
+                            if(sexs[i].value == teacher.sex){
+                                sexs[i].checked;
+                            }
+                        }
+                        $("input[name='sex']:checked").val();
+                        $("#telphone").val(teacher.telphone);
+                        $("#email").val(teacher.email);
+                        $("#state").val(teacher.state);
                     }
                 })
                 $('#addTeacherModel').modal({
@@ -53,17 +87,35 @@
                     show:true
                 })
             })
-            //删除
-            $(".deleteTeacher").click(function () {
-                var isDelete = confirm ("确定删除吗？");
-                if(isDelete){
+            //启用
+            $(".enableTeacher").click(function () {
+                var isEnable = confirm ("确定启用该教师吗？");
+                if(isEnable){
                     var id = $(this).parent().parent().children("td:eq(0)").text();
                     //查询条件
-                    var searchTeacherState = $("#searchTeacherState").val();
-                    var searchTeacherName = $("#searchTeacherName").val();
+                    var searchState = $("#searchState").val();
+                    var searchUserName = $("#searchUserName").val().trim();
+                    var searchRealName = $("#searchRealName").val().trim();
                     var currentPage = $("#currentPage").val();
-                    var url = "/manager/deleteTeacher?teacherId=" + id + "&method=delete"
-                        + "&currentPage="+currentPage+"&searchTeacherName="+searchTeacherName+"&searchTeacherState="+searchTeacherState;
+                    var url = "/manager/enableTeacher?teacherId=" + id
+                        + "&currentPage="+currentPage+"&searchUserName="+searchUserName+"&searchState="+searchState+"&searchRealName="+searchRealName;
+                    $(".content").load(url);
+                }else{
+                    return;
+                }
+            })
+            //停用
+            $(".disableTeacher").click(function () {
+                var isDisable = confirm ("确定停用该教师吗？");
+                if(isDisable){
+                    var id = $(this).parent().parent().children("td:eq(0)").text();
+                    //查询条件
+                    var searchState = $("#searchState").val();
+                    var searchUserName = $("#searchUserName").val().trim();
+                    var searchRealName = $("#searchRealName").val().trim();
+                    var currentPage = $("#currentPage").val();
+                    var url = "/manager/disableTeacher?teacherId=" + id
+                        + "&currentPage="+currentPage+"&searchUserName="+searchUserName+"&searchState="+searchState+"&searchRealName="+searchRealName;
                     $(".content").load(url);
                 }else{
                     return;
@@ -72,14 +124,15 @@
         });
         //查询的手动提交方式
         function search(currentPage) {
-            var searchTeacherState = $("#searchTeacherState option:selected").val();
-            var searchTeacherName = $("#searchTeacherName").val().trim();
+            var searchState = $("#searchState option:selected").val();
+            var searchUserName = $("#searchUserName").val().trim();
+            var searchRealName = $("#searchRealName").val().trim();
             if(currentPage == null){
                 var currentPage = $("#currentPage").val();
             }else{
                 var currentPage = currentPage;
             }
-            var url = "/manager/teacherList?currentPage="+currentPage+"&searchTeacherName="+searchTeacherName+"&searchTeacherState="+searchTeacherState;
+            var url = "/manager/teacherList?currentPage="+currentPage+"&searchUserName="+searchUserName+"&searchState="+searchState+"&searchRealName="+searchRealName;
             $(".content").load(url);
         }
     </script>
@@ -89,15 +142,19 @@
 <div class="modal-body">
     <div class="form-group row">
         <div class="col-xs-3">
-            <label for="searchTeacherName" >教师登录名称:</label>
-            <input type="text" class="myinput"  placeholder="" id="searchTeacherName" name="searchTeacherName" th:value="${condition.name}">
+            <label for="searchUserName" >教师用户名:</label>
+            <input type="text" class="myinput"  placeholder="" id="searchUserName" name="searchUserName" th:value="${condition.username}">
+        </div>
+        <div class="col-xs-3">
+            <label for="searchRealName" >教师真实名称:</label>
+            <input type="text" class="myinput"  placeholder="" id="searchRealName" name="searchRealName" th:value="${condition.realname}">
         </div>
         <div class="col-xs-2">
-            <label for="searchTeacherState">教师状态</label>
-            <select class="myinput" name="searchTeacherState" id="searchTeacherState">
-                <option value="-1" th:selected="${condition.state=='-1'}">全部</option>
-                <option value="0" th:selected="${condition.state=='0'}">启用</option>
-                <option value="1" th:selected="${condition.state=='1'}">停用</option>
+            <label for="searchState">教师状态</label>
+            <select class="myinput" name="searchState" id="searchState">
+                <option value="-1" th:selected="${condition.state==-1}">全部</option>
+                <option value="0" th:selected="${condition.state==0}">启用</option>
+                <option value="1" th:selected="${condition.state==1}">停用</option>
             </select>
         </div>
     </div>
@@ -113,8 +170,11 @@
         <thead>
         <tr>
             <th hidden>ID</th>
-            <!-- <th>品牌图片</th>-->
-            <th>教师名称</th>
+            <th>教师用户名</th>
+            <th>教师真实名称</th>
+            <th>联系电话</th>
+            <th>邮箱</th>
+            <th>性别</th>
             <th>教师状态</th>
             <th>创建时间</th>
             <th>操作</th>
@@ -123,13 +183,17 @@
         <tbody>
         <tr th:each="teacher: ${teacherList}">
             <td th:text="${teacher.id}" hidden></td>
-            <!-- <td th:text="${teacher.pic}"></td>-->
             <td th:text="${teacher.username}"></td>
+            <td th:text="${teacher.realname}"></td>
+            <td th:text="${teacher.telphone}"></td>
+            <td th:text="${teacher.email}"></td>
+            <td th:text="${teacher.sexStr}"></td>
             <td th:text="${teacher.stateStr}"></td>
             <td th:text="${teacher.ctime!=null}?${#dates.format(teacher.ctime, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
                 <a class="btn btn-default updateTeacher" href="#" role="button"  name="updateTeacher">修改</a>
-                <a class="btn btn-default deleteTeacher" href="#" role="button"  name="deleteTeacher">删除</a>
+                <a class="btn btn-default enableTeacher" href="#" role="button"  name="enableTeacher" th:if="${teacher.state==1}">启用</a>
+                <a class="btn btn-default disableTeacher" href="#" role="button"  name="disableTeacher" th:if="${teacher.state==0}">停用</a>
             </td>
         </tr>
         </tbody>
@@ -141,7 +205,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel">新增品牌信息</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel">新增教师信息</h4>
             </div>
             <div class="modal-body">
                 <form method="post" action="" id="addForm">
@@ -150,12 +214,29 @@
                         <input type="text" class="form-control" id="teacherId" name="teacherId" value="">
                     </div>
                     <div class="form-group">
-                        <label for="teacherName" class="control-label">教师名称:</label>
-                        <input type="text" class="form-control" id="teacherName" name="teacherName" required>
+                        <label for="username" class="control-label">教师用户名:</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
                     </div>
                     <div class="form-group">
-                        <label for="teacherState" class="control-label">品牌状态:</label>
-                        <select id="teacherState" name="teacherState" class="form-control">
+                        <label for="realname" class="control-label">教师真实名称:</label>
+                        <input type="text" class="form-control" id="realname" name="realname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telphone" class="control-label">联系电话:</label>
+                        <input type="text" class="form-control" id="telphone" name="telphone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="control-label">邮箱:</label>
+                        <input type="text" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">性别:</label>
+                        <input id="man" type="radio"  name="sex"  value="0" th:checked="${session.user.sex==0}"/>男&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="woman" type="radio"  name="sex"  value="1" th:checked="${session.user.sex==1}"/>女
+                    </div>
+                    <div class="form-group">
+                        <label for="state" class="control-label">教师状态:</label>
+                        <select id="state" name="state" class="form-control">
                             <option value="0">启用</option>
                             <option value="1">停用</option>
                         </select>

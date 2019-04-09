@@ -3,14 +3,17 @@ package org.lanqiao.thesismanager.controller;
 import org.lanqiao.thesismanager.pojo.Condition;
 import org.lanqiao.thesismanager.pojo.Teacher;
 import org.lanqiao.thesismanager.service.ITeacherService;
+import org.lanqiao.thesismanager.utils.MD5Utils;
 import org.lanqiao.thesismanager.utils.PageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -35,21 +38,23 @@ public class TeacherController {
         if(req.getParameter("pageSize") != null){
             pageSize = Integer.valueOf(req.getParameter("pageSize"));
         }
-
         //查询条件
-        String searchTeacherName = "";
-        if(req.getParameter("searchTeacherName") != null){
-            searchTeacherName = req.getParameter("searchTeacherName");
+        String searchUserName = "";
+        if(req.getParameter("searchUserName") != null){
+            searchUserName = req.getParameter("searchUserName");
         }
-        String searchTeacherState = "";
-        if(req.getParameter("searchTeacherState") != null){
-            searchTeacherState = req.getParameter("searchTeacherState");
-        }else{
-            searchTeacherState = "-1";
+        String searchRealName = "";
+        if(req.getParameter("searchRealName") != null){
+            searchRealName = req.getParameter("searchRealName");
+        }
+        int searchState = -1;
+        if(req.getParameter("searchState") != null){
+            searchState = Integer.valueOf(req.getParameter("searchState"));
         }
         Condition condition = new Condition();
-        condition.setName(searchTeacherName);
-        condition.setState(searchTeacherState);
+        condition.setUsername(searchUserName);
+        condition.setRealname(searchRealName);
+        condition.setState(searchState);
         int totalRecords = teacherService.getTeacherCountByCondition(condition);
         //不同操作，不同的当前页设置
         PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
@@ -74,5 +79,79 @@ public class TeacherController {
         return "/manager/teacherList";
     }
 
+    @RequestMapping("/manager/addTeacher")
+    public String addTeacher(HttpServletRequest req, HttpServletResponse resp, Model model){
+        Teacher teacher = Teacher.builder().build();
+        //获取前端传入的信息
+        String username = req.getParameter("username");
+        String password = MD5Utils.MD5("123456");
+        String realname = req.getParameter("realname");
+        int state = Integer.valueOf(req.getParameter("state"));
+        int sex = Integer.valueOf(req.getParameter("sex"));
+        String telphone = req.getParameter("telphone");
+        String email = req.getParameter("email");
+        teacher.setUsername(username);
+        teacher.setPassword(password);
+        teacher.setRealname(realname);
+        teacher.setState(state);
+        teacher.setSex(sex);
+        teacher.setTelphone(telphone);
+        teacher.setEmail(email);
+        teacherService.addTeacher(teacher);
+        return teacherList(req, resp, model);
+    }
 
+    @RequestMapping("/manager/updateTeacher")
+    public String updateTeacher(HttpServletRequest req, HttpServletResponse resp, Model model){
+        Teacher teacher = Teacher.builder().build();
+
+        String username = req.getParameter("username");
+        String realname = req.getParameter("realname");
+        int state = Integer.valueOf(req.getParameter("state"));
+        int sex = Integer.valueOf(req.getParameter("sex"));
+        String telphone = req.getParameter("telphone");
+        String email = req.getParameter("email");
+        String teacherId = req.getParameter("teacherId");
+
+        teacher.setUsername(username);
+        teacher.setRealname(realname);
+        teacher.setState(state);
+        teacher.setSex(sex);
+        teacher.setTelphone(telphone);
+        teacher.setEmail(email);
+        teacher.setId(Integer.valueOf(teacherId));
+        teacherService.modifyTeacher(teacher);
+        return teacherList(req,resp,model);
+    }
+
+    @RequestMapping("/manager/getTeacherById")
+    @ResponseBody
+    public Teacher getTeacherById(HttpServletRequest req, HttpServletResponse resp){
+        String teacherId = req.getParameter("teacherId");
+        Teacher teacher = teacherService.getTeacher(Integer.valueOf(teacherId));
+        return teacher;
+    }
+
+    @RequestMapping("/manager/enableTeacher")
+    public String enableTeacher(HttpServletRequest req, HttpServletResponse resp, Model model){
+        String teacherId = req.getParameter("teacherId");
+        teacherService.enableTeacherById(Integer.valueOf(teacherId));
+        return teacherList(req,resp,model);
+    }
+
+
+    @RequestMapping("/manager/disableTeacher")
+    public String disableTeacher(HttpServletRequest req, HttpServletResponse resp, Model model){
+        String teacherId = req.getParameter("teacherId");
+        teacherService.disableTeacherById(Integer.valueOf(teacherId));
+        return teacherList(req,resp,model);
+    }
+
+
+    @RequestMapping("/manager/deleteTeacher")
+    public String deleteTeacher(HttpServletRequest req, HttpServletResponse resp, Model model){
+        String teacherId = req.getParameter("teacherId");
+        teacherService.removeTeacherById(Integer.valueOf(teacherId));
+        return teacherList(req,resp,model);
+    }
 }

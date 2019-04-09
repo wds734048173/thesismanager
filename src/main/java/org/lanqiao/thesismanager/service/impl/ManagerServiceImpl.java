@@ -20,4 +20,14 @@ public class ManagerServiceImpl implements IManagerService {
     public Manager getManager(Manager manager) {
         return managerMapper.selectManager(manager);
     }
+
+    @Override
+    public void modifyManager(Manager manager) {
+        managerMapper.updateManager(manager);
+    }
+
+    @Override
+    public Manager getManagerById(int id) {
+        return managerMapper.selectManagerById(id);
+    }
 }

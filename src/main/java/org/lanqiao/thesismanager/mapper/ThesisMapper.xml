@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lanqiao.thesismanager.mapper.ThesisMapper">
+    <!--<insert id="insertTeacher" parameterType="org.lanqiao.thesismanager.pojo.Thesis">
+        insert into tb_teacher (username,password,realname,sex,telphone,email,state,ctime) values (#{username},#{password},#{realname},#{sex},#{telphone},#{email},#{state},now())
+    </insert>-->
+    <select id="selectThesisModelList" resultType="org.lanqiao.thesismanager.pojo.Thesis" parameterType="org.lanqiao.thesismanager.pojo.Condition">
+        select * from tb_thesis where sid = 0 order by ctime desc
+        <if test="currentPage != null">
+            limit #{currentPage}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectThesisModelCount" resultType="int" parameterType="org.lanqiao.thesismanager.pojo.Condition">
+        select count(1) from tb_thesis where sid = 0
+    </select>
+
+   <!-- <update id="updateTeacher" parameterType="org.lanqiao.thesismanager.pojo.Teacher">
+        update tb_teacher set username=#{username},realname=#{realname},state=#{state},sex=#{sex},rtime=now(),telphone=#{telphone},email=#{email} where id=#{id}
+    </update>
+
+    <select id="selectTeacherById" parameterType="int" resultType="org.lanqiao.thesismanager.pojo.Teacher">
+        select * from tb_teacher where id=#{id}
+    </select>
+
+    <update id="enableTeacherById" parameterType="int">
+        update tb_teacher set state=0,rtime=now() where id=#{id}
+    </update>
+    <update id="disableTeacherById" parameterType="int">
+        update tb_teacher set state=1,rtime=now() where id=#{id}
+    </update>
+    <update id="deleteTeacherById" parameterType="int">
+        update tb_teacher set state=2,rtime=now() where id=#{id}
+    </update>-->
+</mapper>
