@@ -18,4 +18,8 @@ public interface ManagerMapper {
     public Manager selectManagerById(int id);
     //修改密码
     public void updatePassword(Manager manager);
+    //通过用户名获取用户信息
+    public Manager selectManagerByName(String username);
+    //新增管理员信息
+    public void insertManager(Manager manager);
 }

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
  * @Auther: WDS
@@ -90,42 +91,60 @@ public class ManagerLoginController {
         }
     }
     //管理员注册（有注册功能，但是不一定对外开放）
-    /*@RequestMapping("/manager/register")
+    @RequestMapping("/manager/register")
     public String register(HttpServletRequest req, HttpServletResponse resp, Model model){
         //注册页面密码确认
         String username = req.getParameter("username");
-        Manager users = managerService.selectByName(username);
-//        判断用户名是否存在
+        if(username.length() > 20){
+            model.addAttribute("msg","用户名长度多于20，请重新输入");
+            return "/manager/userRegister";
+        }
+        Manager users = managerService.getManagerByName(username);
+        //判断用户名是否存在
         if (users !=null){
-            model.addAttribute("msg","用户名已存在");
-            return "/manager/userregister";
+            model.addAttribute("msg","用户名已存在，请重新输入");
+            return "/manager/userRegister";
         }else {
             String password1 = req.getParameter("password1");
             String password2 = req.getParameter("password2");
-            //性别信息转换
-            String sex =req.getParameter("sex");
-            int usersex = 0;
-            if ("女".equals(sex)){
-                usersex=1;
-            }
-            //密码的判断
             if (StringUtils.isEmpty(password1)|| StringUtils.isEmpty(password2)||!password1.equalsIgnoreCase(password2)){
-                model.addAttribute("msg","密码不一致");
+                model.addAttribute("msg","密码不一致，请重新输入");
                 return "/manager/userRegister";
-            }else {
-                Manager manager = new Manager();
-                manager.setUsername(username);
-                String pwdMD5 = MD5Utils.MD5(password2);
-                manager.setPassword(pwdMD5);
-                manager.setSex(usersex);
-//                状态默认0
-                manager.setState(0);
-                managerService.add(manager);
-                model.addAttribute("msg","注册成功");
-                return "/manager/login";
             }
+            //性别
+            int sex =Integer.valueOf(req.getParameter("sex"));
+            //真实名称
+            String realname = req.getParameter("realname").trim();
+            if(realname.length() > 20){
+                model.addAttribute("msg","真实名称长度多于20，请重新输入");
+                return "/manager/userRegister";
+            }
+            //手机号
+            String telphone = req.getParameter("telphone");
+            if(!Pattern.matches("^1[3,4,5,6,7,8][0-9]\\d{8}$",telphone)){
+                model.addAttribute("msg","手机号格式错误，请重新输入");
+                return "/manager/userRegister";
+            }
+            //邮箱
+            String email = req.getParameter("email");
+            if(!Pattern.matches("^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$",email)){
+                model.addAttribute("msg","邮箱格式错误，请重新输入");
+                return "/manager/userRegister";
+            }
+            Manager manager = new Manager();
+            manager.setUsername(username);
+            String pwdMD5 = MD5Utils.MD5(password2);
+            manager.setPassword(pwdMD5);
+            manager.setSex(sex);
+            manager.setState(0);
+            manager.setTelphone(telphone);
+            manager.setEmail(email);
+            manager.setRealname(realname);
+            managerService.addManager(manager);
+            model.addAttribute("msg","注册成功");
+            return "/manager/login";
         }
-    }*/
+    }
 
     @RequestMapping("/manager/exit")
     public String exit(HttpServletRequest req, HttpServletResponse resp, Model model){

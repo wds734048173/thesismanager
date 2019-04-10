@@ -19,8 +19,10 @@ public interface StudentMapper {
     public List<Student> selectStudentListByCondition(Condition condition);
     //新增学生信息
     public void insertStudent(Student student);
-    //获取通过id学生详情
+    //通过id获取学生详情
     public Student selectStudentById(int id);
+    //通过用户名获取学生详情
+    public Student selectStudentByName(String username);
     //修改学生信息
     public void updateStudent(Student student);
     //启用学生

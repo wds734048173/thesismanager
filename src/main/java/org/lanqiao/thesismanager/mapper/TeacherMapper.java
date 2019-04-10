@@ -19,8 +19,10 @@ public interface TeacherMapper {
     public List<Teacher> selectTeacherListByCondition(Condition condition);
     //新增教师信息
     public void insertTeacher(Teacher teacher);
-    //获取通过id教师详情
+    //通过id获取教师详情
     public Teacher selectTeacherById(int id);
+    //通过用户名获取教师详情
+    public Teacher selectTeacherByName(String username);
     //修改教师信息
     public void updateTeacher(Teacher teacher);
     //启用教师

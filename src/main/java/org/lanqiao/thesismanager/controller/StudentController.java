@@ -1,10 +1,8 @@
 package org.lanqiao.thesismanager.controller;
 
 import org.lanqiao.thesismanager.pojo.Condition;
-import org.lanqiao.thesismanager.pojo.Manager;
 import org.lanqiao.thesismanager.pojo.Student;
 import org.lanqiao.thesismanager.pojo.Teacher;
-import org.lanqiao.thesismanager.service.IStudentService;
 import org.lanqiao.thesismanager.service.IStudentService;
 import org.lanqiao.thesismanager.service.ITeacherService;
 import org.lanqiao.thesismanager.utils.MD5Utils;
@@ -144,7 +142,7 @@ public class StudentController {
     @ResponseBody
     public Student getStudentById(HttpServletRequest req, HttpServletResponse resp){
         String studentId = req.getParameter("studentId");
-        Student student = studentService.getStudent(Integer.valueOf(studentId));
+        Student student = studentService.getStudentById(Integer.valueOf(studentId));
         return student;
     }
 
@@ -188,7 +186,7 @@ public class StudentController {
         studentService.modifyStudent(student);
         //重新给session赋值
         HttpSession session = req.getSession();
-        Student retUser = studentService.getStudent(id);
+        Student retUser = studentService.getStudentById(id);
         session.setAttribute("user", retUser);
         model.addAttribute("msg", "修改成功！");
         return "/student/userInfo";
@@ -202,7 +200,7 @@ public class StudentController {
         String password1 = req.getParameter("password1");
         String password2 = req.getParameter("password2");
         //通过id查询学生信息
-        Student student = studentService.getStudent(id);
+        Student student = studentService.getStudentById(id);
         String passwordMD5 = MD5Utils.MD5(password);
         if(!student.getPassword().equals(passwordMD5)){
             model.addAttribute("msg", "原密码输入错误，请重新输入！");

@@ -71,6 +71,10 @@
         select * from tb_teacher where id=#{id}
     </select>
 
+    <select id="selectTeacherByName" parameterType="string" resultType="org.lanqiao.thesismanager.pojo.Teacher">
+        select * from tb_teacher where username=#{username}
+    </select>
+
     <update id="enableTeacherById" parameterType="int">
         update tb_teacher set state=0,rtime=now() where id=#{id}
     </update>

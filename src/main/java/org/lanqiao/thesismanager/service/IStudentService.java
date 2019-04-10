@@ -14,7 +14,9 @@ public interface IStudentService {
     //新增学生信息
     public void addStudent(Student student);
     //通过id获取学生信息
-    public Student getStudent(int id);
+    public Student getStudentById(int id);
+    //通过用户名获取学生信息
+    public Student getStudentByName(String username);
     //修改学生信息
     public void modifyStudent(Student student);
     //停用学生

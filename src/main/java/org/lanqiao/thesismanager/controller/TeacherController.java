@@ -129,7 +129,7 @@ public class TeacherController {
     @ResponseBody
     public Teacher getTeacherById(HttpServletRequest req, HttpServletResponse resp){
         String teacherId = req.getParameter("teacherId");
-        Teacher teacher = teacherService.getTeacher(Integer.valueOf(teacherId));
+        Teacher teacher = teacherService.getTeacherById(Integer.valueOf(teacherId));
         return teacher;
     }
 
@@ -192,7 +192,7 @@ public class TeacherController {
         teacherService.modifyTeacher(teacher);
         //重新给session赋值
         HttpSession session = req.getSession();
-        Teacher retUser = teacherService.getTeacher(id);
+        Teacher retUser = teacherService.getTeacherById(id);
         session.setAttribute("user", retUser);
         model.addAttribute("msg", "修改成功！");
         return "/teacher/userInfo";
@@ -206,7 +206,7 @@ public class TeacherController {
         String password1 = req.getParameter("password1");
         String password2 = req.getParameter("password2");
         //通过id查询学生信息
-        Teacher teacher = teacherService.getTeacher(id);
+        Teacher teacher = teacherService.getTeacherById(id);
         String passwordMD5 = MD5Utils.MD5(password);
         if(!teacher.getPassword().equals(passwordMD5)){
             model.addAttribute("msg", "原密码输入错误，请重新输入！");

@@ -34,4 +34,10 @@
     <update id="updatePassword" parameterType="org.lanqiao.thesismanager.pojo.Manager">
         update tb_manager set password=#{password},rtime=now() where id=#{id}
     </update>
+    <select id="selectManagerByName" parameterType="string" resultType="org.lanqiao.thesismanager.pojo.Manager">
+        select * from tb_manager where username=#{username}
+    </select>
+    <insert id="insertManager" parameterType="org.lanqiao.thesismanager.pojo.Manager">
+        insert into tb_manager (username,password,realname,sex,telphone,email,state,ctime) values (#{username},#{password},#{realname},#{sex},#{telphone},#{email},#{state},now())
+    </insert>
 </mapper>

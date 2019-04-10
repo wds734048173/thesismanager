@@ -30,6 +30,7 @@ public class DefaultConfig implements WebMvcConfigurer {
         registry.addViewController("/manager/").setViewName("/manager/index");
         registry.addViewController("/manager/userInfo").setViewName("/manager/userInfo");
         registry.addViewController("/manager/toUpdatePassword").setViewName("/manager/updatePassword");//进入修改密码页面
+        registry.addViewController("/manager/toUserRegister").setViewName("/manager/userRegister");
 
         //教师页面
         registry.addViewController("/teacher").setViewName("/teacher/index");
@@ -38,8 +39,7 @@ public class DefaultConfig implements WebMvcConfigurer {
         //跳转到修改密码页面
         registry.addViewController("/teacher/toUpdatePassword").setViewName("/teacher/updatePassword");
         //跳转到注册页面
-        registry.addViewController("/teacher/cusRegister").setViewName("/teacher/cusRegister");
-        registry.addViewController("/teacher/personalDetalis").setViewName("/teacher/personalDetalis");
+        registry.addViewController("/teacher/toUserRegister").setViewName("/teacher/userRegister");
 
         //学生页面
         registry.addViewController("/student").setViewName("/student/index");
@@ -48,8 +48,7 @@ public class DefaultConfig implements WebMvcConfigurer {
         //跳转到修改密码页面
         registry.addViewController("/student/toUpdatePassword").setViewName("/student/updatePassword");
         //跳转到注册页面
-        registry.addViewController("/student/cusRegister").setViewName("/student/cusRegister");
-        registry.addViewController("/student/personalDetalis").setViewName("/student/personalDetalis");
+        registry.addViewController("/student/toUserRegister").setViewName("/student/userRegister");
     }
 
     //拦截器
@@ -57,13 +56,13 @@ public class DefaultConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ManagerLoginInterceptor())
                 .addPathPatterns("/manager/*","/manager")
-                .excludePathPatterns("/manager/login","/manager/register","/druid/*");
+                .excludePathPatterns("/manager/login","/manager/register","/manager/toUserRegister","/druid/*");
         registry.addInterceptor(new StudentLoginInterceptor())
                 .addPathPatterns("/student/*","/student")
-                .excludePathPatterns("/student/login","/student/register","/druid/*");
+                .excludePathPatterns("/student/login","/student/register","/student/toUserRegister","/druid/*");
         registry.addInterceptor(new TeacherLoginInterceptor())
                 .addPathPatterns("/teacher/*","/teacher")
-                .excludePathPatterns("/teacher/login","/teacher/register","/druid/*");
+                .excludePathPatterns("/teacher/login","/teacher/register","/teacher/toUserRegister","/druid/*");
     }
 
     //日期格式化

@@ -62,8 +62,13 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public Student getStudent(int id) {
+    public Student getStudentById(int id) {
         return studentMapper.selectStudentById(id);
+    }
+
+    @Override
+    public Student getStudentByName(String username) {
+        return studentMapper.selectStudentByName(username);
     }
 
     @Override

@@ -35,4 +35,14 @@ public class ManagerServiceImpl implements IManagerService {
     public void modifyManagerPassword(Manager manager) {
         managerMapper.updatePassword(manager);
     }
+
+    @Override
+    public Manager getManagerByName(String username) {
+        return managerMapper.selectManagerByName(username);
+    }
+
+    @Override
+    public void addManager(Manager manager) {
+        managerMapper.insertManager(manager);
+    }
 }

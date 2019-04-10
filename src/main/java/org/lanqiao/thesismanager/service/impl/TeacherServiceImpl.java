@@ -51,8 +51,13 @@ public class TeacherServiceImpl implements ITeacherService {
     }
 
     @Override
-    public Teacher getTeacher(int id) {
+    public Teacher getTeacherById(int id) {
         return teacherMapper.selectTeacherById(id);
+    }
+
+    @Override
+    public Teacher getTeacherByName(String username) {
+        return teacherMapper.selectTeacherByName(username);
     }
 
     @Override

@@ -14,7 +14,9 @@ public interface ITeacherService {
     //新增教师信息
     public void addTeacher(Teacher teacher);
     //通过id获取教师信息
-    public Teacher getTeacher(int id);
+    public Teacher getTeacherById(int id);
+    //通过用户名获取教师信息
+    public Teacher getTeacherByName(String username);
     //修改教师信息
     public void modifyTeacher(Teacher teacher);
     //停用教师
