@@ -29,4 +29,6 @@ public interface StudentMapper {
     public void disableStudentById(int id);
     //删除学生
     public void deleteStudentById(int id);
+    //修改密码
+    public void updatePassword(Student student);
 }

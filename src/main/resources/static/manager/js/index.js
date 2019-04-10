@@ -14,6 +14,8 @@ function pageClick(k) {
         url = "/manager/thesisList";
     } else if (text == "个人信息管理") {
         url = "/manager/userInfo";
+    }else if (text == "密码管理") {
+        url = "/manager/toUpdatePassword";
     }
     $(".content").load(url);
 }

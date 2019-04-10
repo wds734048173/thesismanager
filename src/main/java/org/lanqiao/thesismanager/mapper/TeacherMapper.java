@@ -29,4 +29,6 @@ public interface TeacherMapper {
     public void disableTeacherById(int id);
     //删除教师
     public void deleteTeacherById(int id);
+    //修改密码
+    public void updatePassword(Teacher teacher);
 }

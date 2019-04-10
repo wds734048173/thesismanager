@@ -61,4 +61,7 @@
     <update id="deleteTeacherById" parameterType="int">
         update tb_teacher set state=2,rtime=now() where id=#{id}
     </update>
+    <update id="updatePassword" parameterType="org.lanqiao.thesismanager.pojo.Teacher">
+        update tb_teacher set password=#{password},rtime=now() where id=#{id}
+    </update>
 </mapper>

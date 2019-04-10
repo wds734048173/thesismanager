@@ -14,4 +14,6 @@ public interface IManagerService {
     public void modifyManager(Manager manager);
     //通过id获取管理员信息
     public Manager getManagerById(int id);
+    //修改管理员密码
+    public void modifyManagerPassword(Manager manager);
 }

@@ -30,4 +30,9 @@ public class ManagerServiceImpl implements IManagerService {
     public Manager getManagerById(int id) {
         return managerMapper.selectManagerById(id);
     }
+
+    @Override
+    public void modifyManagerPassword(Manager manager) {
+        managerMapper.updatePassword(manager);
+    }
 }

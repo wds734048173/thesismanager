@@ -16,4 +16,6 @@ public interface ManagerMapper {
     public void updateManager(Manager manager);
     //通过id获取管理员信息
     public Manager selectManagerById(int id);
+    //修改密码
+    public void updatePassword(Manager manager);
 }

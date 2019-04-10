@@ -12,4 +12,7 @@
     <select id="selectManagerById" parameterType="int" resultType="org.lanqiao.thesismanager.pojo.Manager">
         select * from tb_manager where id=#{id}
     </select>
+    <update id="updatePassword" parameterType="org.lanqiao.thesismanager.pojo.Manager">
+        update tb_manager set password=#{password},rtime=now() where id=#{id}
+    </update>
 </mapper>
