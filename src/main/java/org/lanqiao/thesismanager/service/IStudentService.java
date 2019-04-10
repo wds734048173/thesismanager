@@ -1,6 +1,7 @@
 package org.lanqiao.thesismanager.service;
 
 import org.lanqiao.thesismanager.pojo.Condition;
+import org.lanqiao.thesismanager.pojo.Manager;
 import org.lanqiao.thesismanager.pojo.Student;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface IStudentService {
     public void enableStudentById(int id);
     //删除学生
     public void removeStudentById(int id);
+    //修改密码
+    public void modifyPassword(Student student);
+    //查询学生信息
+    public Student getStudent(Student student);
 }

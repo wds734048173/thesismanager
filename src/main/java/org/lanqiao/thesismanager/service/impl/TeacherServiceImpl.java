@@ -19,6 +19,7 @@ public class TeacherServiceImpl implements ITeacherService {
 
     @Autowired
     TeacherMapper teacherMapper;
+
     @Override
     public int getTeacherCountByCondition(Condition condition) {
         return teacherMapper.selectTeacherCountByCondition(condition);
@@ -72,5 +73,25 @@ public class TeacherServiceImpl implements ITeacherService {
     @Override
     public void removeTeacherById(int id) {
         teacherMapper.deleteTeacherById(id);
+    }
+
+    @Override
+    public void modifyPassword(Teacher teacher) {
+        teacherMapper.updatePassword(teacher);
+    }
+
+    @Override
+    public List<Teacher> getTeacherSelectList() {
+        return teacherMapper.selectTeacherSelectList();
+    }
+
+    @Override
+    public List<Teacher> getTeacherAll() {
+        return teacherMapper.selectTeacherAll();
+    }
+
+    @Override
+    public Teacher getTeacher(Teacher teacher) {
+        return teacherMapper.selectTeacher(teacher);
     }
 }

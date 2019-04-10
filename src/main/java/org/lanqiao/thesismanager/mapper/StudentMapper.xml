@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.lanqiao.thesismanager.mapper.StudentMapper">
     <insert id="insertStudent" parameterType="org.lanqiao.thesismanager.pojo.Student">
-        insert into tb_student (username,password,realname,sex,telphone,email,state,ctime) values (#{username},#{password},#{realname},#{sex},#{telphone},#{email},#{state},now())
+        insert into tb_student (username,password,realname,sex,telphone,email,state,ctime,tid) values (#{username},#{password},#{realname},#{sex},#{telphone},#{email},#{state},now(),#{tId})
     </insert>
     <select id="selectStudentListByCondition" resultType="org.lanqiao.thesismanager.pojo.Student" parameterType="org.lanqiao.thesismanager.pojo.Condition">
         select * from tb_student
@@ -20,6 +20,9 @@
             </if>
             <if test="state == -1">
                 and state!=2
+            </if>
+            <if test="tId != -1">
+                and tid=#{tId}
             </if>
         </where>
         <if test="currentPage != null">
@@ -41,11 +44,36 @@
             <if test="state == -1">
                 and state!=2
             </if>
+            <if test="tId != -1">
+                and tid=#{tId}
+            </if>
         </where>
     </select>
 
     <update id="updateStudent" parameterType="org.lanqiao.thesismanager.pojo.Student">
-        update tb_student set username=#{username},realname=#{realname},state=#{state},sex=#{sex},rtime=now(),telphone=#{telphone},email=#{email} where id=#{id}
+        update tb_student set
+        <if test="username != null &amp;&amp; username != ''">
+            username=#{username},
+        </if>
+        <if test="realname != null &amp;&amp; realname != ''">
+            realname=#{realname},
+        </if>
+        <if test="state != null">
+            state=#{state},
+        </if>
+        <if test="sex != null">
+            sex=#{sex},
+        </if>
+        <if test="telphone != null &amp;&amp; telphone != ''">
+            telphone=#{telphone},
+        </if>
+        <if test="email != null &amp;&amp; email != ''">
+            email=#{email},
+        </if>
+        <if test="tId != null &amp;&amp; tId != ''">
+            tid=#{tId},
+        </if>
+        rtime=now() where id=#{id}
     </update>
 
     <select id="selectStudentById" parameterType="int" resultType="org.lanqiao.thesismanager.pojo.Student">
@@ -64,4 +92,8 @@
     <update id="updatePassword" parameterType="org.lanqiao.thesismanager.pojo.Student">
         update tb_student set password=#{password},rtime=now() where id=#{id}
     </update>
+
+    <select id="selectStudent" resultType="org.lanqiao.thesismanager.pojo.Student" parameterType="org.lanqiao.thesismanager.pojo.Student">
+        select * from tb_student where username=#{username} and password=#{password}
+    </select>
 </mapper>

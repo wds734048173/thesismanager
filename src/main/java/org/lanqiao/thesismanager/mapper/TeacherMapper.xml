@@ -45,7 +45,26 @@
     </select>
 
     <update id="updateTeacher" parameterType="org.lanqiao.thesismanager.pojo.Teacher">
-        update tb_teacher set username=#{username},realname=#{realname},state=#{state},sex=#{sex},rtime=now(),telphone=#{telphone},email=#{email} where id=#{id}
+        update tb_teacher set
+        <if test="username != null &amp;&amp; username != ''">
+            username=#{username},
+        </if>
+        <if test="realname != null &amp;&amp; realname != ''">
+            realname=#{realname},
+        </if>
+        <if test="state != null">
+            state=#{state},
+        </if>
+        <if test="sex != null">
+            sex=#{sex},
+        </if>
+        <if test="telphone != null &amp;&amp; telphone != ''">
+            telphone=#{telphone},
+        </if>
+        <if test="email != null &amp;&amp; email != ''">
+            email=#{email},
+        </if>
+        rtime=now() where id=#{id}
     </update>
 
     <select id="selectTeacherById" parameterType="int" resultType="org.lanqiao.thesismanager.pojo.Teacher">
@@ -64,4 +83,13 @@
     <update id="updatePassword" parameterType="org.lanqiao.thesismanager.pojo.Teacher">
         update tb_teacher set password=#{password},rtime=now() where id=#{id}
     </update>
+    <select id="selectTeacherSelectList" resultType="org.lanqiao.thesismanager.pojo.Teacher">
+        select * from tb_teacher where state = 0
+    </select>
+    <select id="selectTeacherAll" resultType="org.lanqiao.thesismanager.pojo.Teacher">
+        select * from tb_teacher
+    </select>
+    <select id="selectTeacher" resultType="org.lanqiao.thesismanager.pojo.Teacher" parameterType="org.lanqiao.thesismanager.pojo.Teacher">
+        select * from tb_teacher where username=#{username} and password=#{password}
+    </select>
 </mapper>

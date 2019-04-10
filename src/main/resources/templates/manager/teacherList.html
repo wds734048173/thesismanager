@@ -7,6 +7,15 @@
         $(function () {
             //新增
             $("#addTeacher").click(function () {
+                $("#teacherId").val("");
+                $("#username").val("");
+                $("#realname").val("");
+                // $("#man").checked;
+                $("[name='sex']:eq(0)").prop("checked",true);
+                $("#telphone").val("");
+                $("#email").val("");
+                $("#state").val(0);
+
                 $('#addTeacherModel').modal({
                     keyboard: false,
                     show:true
@@ -36,7 +45,7 @@
                     alert("真实名称多于20字，请重新输入");
                     return;
                 }
-                if(!(/^1[3|4|5|8][0-9]\d{8}$/.test(telphone))){
+                if(!(/^1[3|4|5|6|7|8][0-9]\d{8}$/.test(telphone))){
                     alert("手机号格式错误，请重新输入");
                     return;
                 }
@@ -70,13 +79,12 @@
                         $("#teacherId").val(teacher.id);
                         $("#username").val(teacher.username);
                         $("#realname").val(teacher.realname);
-                        var sexs = document.getElementsByName("sex");
-                        for(var i = 0; i < sexs.length; i++){
-                            if(sexs[i].value == teacher.sex){
-                                sexs[i].checked;
-                            }
+                        if(teacher.sex == 0){
+                            $("[name='sex']:eq(0)").prop("checked",true);
+                        }else{
+                            $("[name='sex']:eq(1)").prop("checked",true);
                         }
-                        $("input[name='sex']:checked").val();
+                        // $("input[name='sex']:checked").val();
                         $("#telphone").val(teacher.telphone);
                         $("#email").val(teacher.email);
                         $("#state").val(teacher.state);
@@ -115,6 +123,23 @@
                     var searchRealName = $("#searchRealName").val().trim();
                     var currentPage = $("#currentPage").val();
                     var url = "/manager/disableTeacher?teacherId=" + id
+                        + "&currentPage="+currentPage+"&searchUserName="+searchUserName+"&searchState="+searchState+"&searchRealName="+searchRealName;
+                    $(".content").load(url);
+                }else{
+                    return;
+                }
+            })
+            //重置密码
+            $(".updatePassword").click(function () {
+                var isUpdatePassword = confirm ("确定重置该教师密码吗？");
+                if(isUpdatePassword){
+                    var id = $(this).parent().parent().children("td:eq(0)").text();
+                    //查询条件
+                    var searchState = $("#searchState").val();
+                    var searchUserName = $("#searchUserName").val().trim();
+                    var searchRealName = $("#searchRealName").val().trim();
+                    var currentPage = $("#currentPage").val();
+                    var url = "/manager/resetStudentPassword?teacherId=" + id
                         + "&currentPage="+currentPage+"&searchUserName="+searchUserName+"&searchState="+searchState+"&searchRealName="+searchRealName;
                     $(".content").load(url);
                 }else{
@@ -194,6 +219,7 @@
                 <a class="btn btn-default updateTeacher" href="#" role="button"  name="updateTeacher">修改</a>
                 <a class="btn btn-default enableTeacher" href="#" role="button"  name="enableTeacher" th:if="${teacher.state==1}">启用</a>
                 <a class="btn btn-default disableTeacher" href="#" role="button"  name="disableTeacher" th:if="${teacher.state==0}">停用</a>
+                <a class="btn btn-default updatePassword" href="#" role="button"  name="updatePassword">重置密码</a>
             </td>
         </tr>
         </tbody>
@@ -231,8 +257,8 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">性别:</label>
-                        <input id="man" type="radio"  name="sex"  value="0" th:checked="${session.user.sex==0}"/>男&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="woman" type="radio"  name="sex"  value="1" th:checked="${session.user.sex==1}"/>女
+                        <input id="man" type="radio"  name="sex"  value="0"/>男&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="woman" type="radio"  name="sex"  value="1"/>女
                     </div>
                     <div class="form-group">
                         <label for="state" class="control-label">教师状态:</label>

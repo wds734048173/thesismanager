@@ -36,6 +36,7 @@ public class Student {
     private String stateStr;
     //指导老师id
     private int tId;
+    private String teacherRealName;
     //论文题目
     private String thesisTitle;
 

@@ -24,7 +24,6 @@ public class ManagerController {
     //修改个人信息
     @RequestMapping("/manager/updateUser")
     public String updateUser(HttpServletRequest req, HttpServletResponse resp, Model model){
-//        int userId = Integer.valueOf(req.getParameter("userId"));
         int id = ((Manager)req.getSession().getAttribute("user")).getId();
         String realname = req.getParameter("realname");
         int sex = Integer.valueOf(req.getParameter("sex"));
@@ -37,8 +36,6 @@ public class ManagerController {
         manager.setSex(sex);
         manager.setRealname(realname);
         managerService.modifyManager(manager);
-//        HttpSession session = req.getSession();
-//        session.invalidate();
         //重新给session赋值
         HttpSession session = req.getSession();
         Manager retUser = managerService.getManagerById(id);
@@ -50,7 +47,6 @@ public class ManagerController {
     //修改密码
     @RequestMapping("/manager/updatePassword")
     public String updatePassword(HttpServletRequest req, HttpServletResponse resp, Model model){
-//        int userId = Integer.valueOf(req.getParameter("userId"));
         int id = ((Manager)req.getSession().getAttribute("user")).getId();
         String password = req.getParameter("password");
         String password1 = req.getParameter("password1");

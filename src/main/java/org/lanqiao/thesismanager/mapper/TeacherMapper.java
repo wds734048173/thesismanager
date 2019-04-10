@@ -31,4 +31,10 @@ public interface TeacherMapper {
     public void deleteTeacherById(int id);
     //修改密码
     public void updatePassword(Teacher teacher);
+    //获取可用老师列表
+    public List<Teacher> selectTeacherSelectList();
+    //获取所有的老师列表
+    public List<Teacher> selectTeacherAll();
+    //获取学生信息
+    public Teacher selectTeacher(Teacher teacher);
 }

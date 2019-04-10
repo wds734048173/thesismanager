@@ -1,6 +1,7 @@
 package org.lanqiao.thesismanager.service;
 
 import org.lanqiao.thesismanager.pojo.Condition;
+import org.lanqiao.thesismanager.pojo.Student;
 import org.lanqiao.thesismanager.pojo.Teacher;
 
 import java.util.List;
@@ -22,4 +23,12 @@ public interface ITeacherService {
     public void enableTeacherById(int id);
     //删除教师
     public void removeTeacherById(int id);
+    //修改密码
+    public void modifyPassword(Teacher teacher);
+    //获取教师下拉列表
+    public List<Teacher> getTeacherSelectList();
+    //获取所有的教师列表
+    public List<Teacher> getTeacherAll();
+    //查询教师信息
+    public Teacher getTeacher(Teacher teacher);
 }

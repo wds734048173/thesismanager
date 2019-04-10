@@ -1,6 +1,8 @@
 package org.lanqiao.thesismanager.service.impl;
 
 import org.lanqiao.thesismanager.mapper.StudentMapper;
+import org.lanqiao.thesismanager.mapper.TeacherMapper;
+import org.lanqiao.thesismanager.mapper.ThesisMapper;
 import org.lanqiao.thesismanager.pojo.Condition;
 import org.lanqiao.thesismanager.pojo.Student;
 import org.lanqiao.thesismanager.pojo.Teacher;
@@ -19,6 +21,8 @@ import java.util.List;
 public class StudentServiceImpl implements IStudentService {
     @Autowired
     StudentMapper studentMapper;
+    @Autowired
+    TeacherMapper teacherMapper;
     @Override
     public int getStudentCountByCondition(Condition condition) {
         return studentMapper.selectStudentCountByCondition(condition);
@@ -27,6 +31,7 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public List<Student> getStudentListByCondition(Condition condition) {
         List<Student> studentList = studentMapper.selectStudentListByCondition(condition);
+        List<Teacher> teacherList = teacherMapper.selectTeacherAll();
         for(Student student : studentList){
             int state = student.getState();
             if(state == 0){
@@ -39,6 +44,13 @@ public class StudentServiceImpl implements IStudentService {
                 student.setSexStr("男");
             }else{
                 student.setSexStr("女");
+            }
+            int tId = student.getTId();
+            //对指导老师进行匹配
+            for(Teacher teacher : teacherList){
+                if(teacher.getId() == tId){
+                    student.setTeacherRealName(teacher.getRealname());
+                }
             }
         }
         return studentList;
@@ -72,5 +84,15 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public void removeStudentById(int id) {
         studentMapper.deleteStudentById(id);
+    }
+
+    @Override
+    public void modifyPassword(Student student) {
+        studentMapper.updatePassword(student);
+    }
+
+    @Override
+    public Student getStudent(Student student) {
+        return studentMapper.selectStudent(student);
     }
 }
