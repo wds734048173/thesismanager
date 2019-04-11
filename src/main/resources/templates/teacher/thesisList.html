@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>教师论文列表</title>
+    <script type="text/javascript">
+        $(function () {
+            //新增
+            $("#addThesis").click(function () {
+                $('#addThesisModel').modal({
+                    keyboard: false,
+                    show:true
+                })
+            })
+            //保存
+            $("#save").click(function () {
+                //论文备注
+                var thesisModelRemark = $("#thesisModelRemark").val().trim();
+                //论文类型
+                var thesisModelType = $("#thesisModelType option:selected").val();
+                var sId = $("#sId option:selected").val();
+                if(thesisModelRemark.length > 200){
+                    alert("论文备注多于200字，请重新输入");
+                    return;
+                }
+                if(thesisModelType == -1){
+                    alert("请选择论文类型");
+                    return;
+                }
+                if(sId == -1){
+                    alert("请选择学生");
+                    return;
+                }
+                //查询条件
+                var searchType = $("#searchType option:selected").val();
+                var searchCommitType = $("#searchCommitType option:selected").val();
+                var searchSId = $("#searchSId option:selected").val();
+                var currentPage = $("#currentPage").val();
+
+                var url = "/teacher/addTeacherThesis?thesisModelRemark="+thesisModelRemark+"&thesisModelType="+thesisModelType+"&sId="+sId+"&method=add"
+                    +"&currentPage="+currentPage+"&searchType="+searchType+"&searchCommitType="+searchCommitType+"&searchSId="+searchSId;
+                $(".content").load(url);
+                $(".modal-backdrop").remove();
+            })
+            //删除
+            $(".deleteThesis").click(function () {
+                var isDelete = confirm ("确定删除该论文吗？");
+                if(isDelete){
+                    var id = $(this).parent().parent().children("td:eq(0)").text();
+                    //查询条件
+                    var searchType = $("#searchType option:selected").val();
+                    var searchCommitType = $("#searchCommitType option:selected").val();
+                    var searchSId = $("#searchSId option:selected").val();
+                    var currentPage = $("#currentPage").val();
+                    var url = "/teacher/deleteTeacherThesis?thesisId=" + id
+                        + "&currentPage="+currentPage+"&searchType="+searchType+"&searchCommitType="+searchCommitType+"&searchSId="+searchSId;
+                    $(".content").load(url);
+                }else{
+                    return;
+                }
+            })
+        });
+        //查询的手动提交方式
+        function search(currentPage) {
+            var searchType = $("#searchType option:selected").val();
+            var searchCommitType = $("#searchCommitType option:selected").val();
+            var searchSId = $("#searchSId option:selected").val();
+            if(currentPage == null){
+                var currentPage = $("#currentPage").val();
+            }else{
+                var currentPage = currentPage;
+            }
+            var url = "/teacher/thesisList?currentPage="+currentPage+"&searchType="+searchType+"&searchCommitType="+searchCommitType+"&searchSId="+searchSId;
+            $(".content").load(url);
+        }
+    </script>
+</head>
+<body>
+<input type="hidden" name="currentPage" id="currentPage" th:value="${currentPage}">
+<div class="modal-body">
+    <div class="form-group row">
+        <div class="col-xs-2">
+            <label for="searchType">论文类型</label>
+            <select class="myinput" name="searchType" id="searchType">
+                <option value="-1" th:selected="${condition.type==-1}">全部</option>
+                <option value="0" th:selected="${condition.type==0}">课题申请表</option>
+                <option value="1" th:selected="${condition.type==1}">开题报告</option>
+                <option value="2" th:selected="${condition.type==2}">任务书</option>
+                <option value="3" th:selected="${condition.type==3}">中期报告</option>
+                <option value="4" th:selected="${condition.type==4}">毕业设计</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <label for="searchCommitType">论文提交者</label>
+            <select class="myinput" name="searchCommitType" id="searchCommitType">
+                <option value="-1" th:selected="${condition.commitType==-1}">全部</option>
+                <option value="1" th:selected="${condition.commitType==1}">学生提交</option>
+                <option value="2" th:selected="${condition.commitType==2}">老师提交</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <label for="searchSId">学生姓名</label>
+            <select class="myinput" name="searchSId" id="searchSId">
+                <option value="-1">全部</option>
+                <option th:each="student:${studentList}" th:text="${student.realname}" th:value="${student.id}" th:selected="${condition.sId==student.id}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="button" class="btn btn-primary" id="search" value="查询" onclick="search(null)"/>
+    </div>
+</div>
+<div class="modal-body">
+    <a class="btn btn-default" href="#" role="button" id="addThesis" name="addThesis">论文上传</a>
+</div>
+<div class="modal-body">
+    <table class="table table-hover table-bordered" style="text-align: center;">
+        <thead>
+        <tr>
+            <th hidden>ID</th>
+            <th>论文类型</th>
+            <th>论文提交者</th>
+            <th>论文第n次上传</th>
+            <th>备注</th>
+            <th>论文上传时间</th>
+            <th>论文修改时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="thesis: ${thesisList}">
+            <td th:text="${thesis.id}" hidden></td>
+            <td th:text="${thesis.typeStr}"></td>
+            <td th:text="${thesis.commitTypeStr}"></td>
+            <td th:text="${thesis.count}"></td>
+            <td th:text="${thesis.remark}"></td>
+            <td th:text="${thesis.ctime!=null}?${#dates.format(thesis.ctime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${thesis.rtime!=null}?${#dates.format(thesis.rtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <a class="btn btn-default deleteThesis" href="#" role="button"  name="deleteThesis" th:if="${thesis.commitType==2}">删除</a>
+                <a class="btn btn-default downloadThesisModel" href="#" role="button"  name="downloadThesisModel" >下载</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!--新增模态框插件-->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="addThesisModel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">上传论文文件</h4>
+            </div>
+            <div class="modal-body">
+                <!--<form method="post" action="/manager/fileUpload" id="addForm" enctype="multipart/form-data">-->
+                <form method="post" action="" id="addForm">
+                    <div class="form-group">
+                        <label for="sId" class="control-label">学生姓名:</label>
+                        <select id="sId" name="sId" class="form-control">
+                            <option value="-1">全部</option>
+                            <option th:each="student:${studentList}" th:text="${student.realname}" th:value="${student.id}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="thesisModelType" class="control-label">模板类型:</label>
+                        <select id="thesisModelType" name="thesisModelType" class="form-control">
+                            <option value="-1">--请选择--</option>
+                            <option value="0">课题申请表</option>
+                            <option value="1">开题报告</option>
+                            <option value="2">任务书</option>
+                            <option value="3">中期报告</option>
+                            <option value="4">毕业设计</option>
+                        </select>
+                    </div>
+                    <!--<div class="form-group">
+                        <label for="filePicker" class="control-label">上传模板文件:</label>
+                        <div id="uploader-demo" CLASS="myinput">
+                            &lt;!&ndash;用来存放item&ndash;&gt;
+                            <div id="fileList" class="uploader-list"></div>
+                            <div id="filePicker">选择图片</div>
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                        <label for="thesisModelRemark" class="control-label">论文备注:</label>
+                        <input type="text" class="form-control" id="thesisModelRemark" name="thesisModelRemark" required>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary" id="save" value="提交">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--分页插件-->
+<center th:if="${thesisList.size() != 0}">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li th:onclick="search([[${pm.startPage}]])"><a href="javascript:void(0);"><span>首页</span></a></li>
+            <li th:onclick="search([[${pm.prePageNum}]])">
+                <a href="javascript:void(0);" class="page" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(1,pm.totalPageNum)}" th:onclick="search([[${i}]])">
+                <a href="javascript:void(0);">
+                    <span th:if="${i==pm.currentPageNum}" style = 'color:red;'>[[${i}]]</span>
+                    <span th:if="${i!=pm.currentPageNum}">[[${i}]]</span>
+                </a>
+            </li>
+            <li th:onclick="search([[${pm.nextPageNum}]])">
+                <a href="javascript:void(0);" class="page" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li th:onclick="search([[${pm.endPage}]])"><a href="javascript:void(0);"><span>尾页</span></a></li>
+        </ul>
+    </nav>
+</center>
+</body>
+</html>

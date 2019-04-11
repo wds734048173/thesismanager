@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>学生登录</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/body.css"/>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript">
+        function change() {
+            //每次告诉浏览器发送一个新的请求，不适用浏览器的缓存
+            $("#123").attr("src","/imageCodePage?"+Math.random());
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <section id="content">
+        <form action="/student/login" method="post">
+            <h1>学生登录</h1>
+            <div>
+                <input type="text" name="username" required placeholder="请输入用户名">
+            </div>
+            <div>
+                <input type="password" placeholder="请输入密码" required name="password">
+            </div>
+            <div >
+                <input type="text" class="form-control" id="rcode" style="width: 160px;" placeholder="请输入验证码" autocomplete="off" name="rcode" required>
+                <img id="123" src="/imageCodePage" >
+                <a href="javascript:change()" ><font size="1" >看不清</font></a>
+            </div>
+            <div class="">
+                <span th:text="${msg}" style="color: red"></span>
+            </div>
+            <div>
+                <!-- <input type="submit" value="Log in" /> -->
+                <input type="submit" value="登录" class="btn btn-primary" id="js-btn-login" onclick="login()"/>
+                <input type="submit" value="注册" class="btn btn-primary" id="" onclick="window.open('/student/toUserRegister')"/>
+                <!--<a href="#">忘记密码?</a>-->
+                 <!--<a href="#">Register</a> -->
+            </div>
+        </form><!-- form -->
+    </section><!-- content -->
+</div>
+<br><br><br><br>
+</body>
+</html>
