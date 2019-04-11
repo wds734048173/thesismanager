@@ -100,4 +100,8 @@
     <select id="selectStudent" resultType="org.lanqiao.thesismanager.pojo.Student" parameterType="org.lanqiao.thesismanager.pojo.Student">
         select * from tb_student where username=#{username} and password=#{password}
     </select>
+    <select id="selectStudentListByTId" resultType="org.lanqiao.thesismanager.pojo.Student" parameterType="int">
+        select * from tb_student where tid = #{tId}
+    </select>
+
 </mapper>

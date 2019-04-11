@@ -100,4 +100,9 @@ public class StudentServiceImpl implements IStudentService {
     public Student getStudent(Student student) {
         return studentMapper.selectStudent(student);
     }
+
+    @Override
+    public List<Student> getStudentListByTId(int tId) {
+        return studentMapper.selectStudentListByTId(tId);
+    }
 }

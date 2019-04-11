@@ -22,4 +22,8 @@ public interface IThesisService {
     public int getStudentThesisCount(Condition condition);
     //新增论文
     public void addThesis(Thesis thesis);
+    //教师获取论文列表
+    public List<Thesis> getTeacherThesisList(Condition condition);
+    //教师获取论文数量
+    public int getTeacherThesisCount(Condition condition);
 }

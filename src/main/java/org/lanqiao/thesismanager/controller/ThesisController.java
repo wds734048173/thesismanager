@@ -4,6 +4,7 @@ import org.lanqiao.thesismanager.pojo.Condition;
 import org.lanqiao.thesismanager.pojo.Student;
 import org.lanqiao.thesismanager.pojo.Teacher;
 import org.lanqiao.thesismanager.pojo.Thesis;
+import org.lanqiao.thesismanager.service.IStudentService;
 import org.lanqiao.thesismanager.service.IThesisService;
 import org.lanqiao.thesismanager.utils.MD5Utils;
 import org.lanqiao.thesismanager.utils.PageModel;
@@ -32,6 +33,9 @@ public class ThesisController {
 
     @Autowired
     IThesisService thesisService;
+
+    @Autowired
+    IStudentService studentService;
     /**
      * 实现文件上传
      * */
@@ -87,7 +91,7 @@ public class ThesisController {
         PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
         String method = req.getParameter("method");
         if("add".equals(method)){
-            pageNum = pm.getEndPage();
+            pageNum = pm.getStartPage();
         }else{
             //如果当前页大于总页数，但是排除查询不到数据的情况。当前页等于最大页
             if(pageNum > pm.getTotalPageNum() && pm.getTotalPageNum() != 0){
@@ -153,7 +157,7 @@ public class ThesisController {
         PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
         String method = req.getParameter("method");
         if("add".equals(method)){
-            pageNum = pm.getEndPage();
+            pageNum = pm.getStartPage();
         }else{
             //如果当前页大于总页数，但是排除查询不到数据的情况。当前页等于最大页
             if(pageNum > pm.getTotalPageNum() && pm.getTotalPageNum() != 0){
@@ -173,7 +177,7 @@ public class ThesisController {
     }
     //学生获取论文列表
     @RequestMapping("/student/thesisList")
-    public String StudentThesisList(HttpServletRequest req, HttpServletResponse resp, Model model){
+    public String studentThesisList(HttpServletRequest req, HttpServletResponse resp, Model model){
         int pageNum = 1;
         if(req.getParameter("currentPage") != null){
             pageNum = Integer.valueOf(req.getParameter("currentPage"));
@@ -203,7 +207,7 @@ public class ThesisController {
         PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
         String method = req.getParameter("method");
         if("add".equals(method)){
-            pageNum = pm.getEndPage();
+            pageNum = pm.getStartPage();
         }else{
             //如果当前页大于总页数，但是排除查询不到数据的情况。当前页等于最大页
             if(pageNum > pm.getTotalPageNum() && pm.getTotalPageNum() != 0){
@@ -247,14 +251,14 @@ public class ThesisController {
         int count = thesisService.getMaxValue(thesis);
         thesis.setCount(count + 1);
         thesisService.addThesis(thesis);
-        return StudentThesisList(req, resp, model);
+        return studentThesisList(req, resp, model);
     }
     //删除论文
     @RequestMapping("/student/deleteStudentThesis")
     public String deleteStudentThesis(HttpServletRequest req, HttpServletResponse resp, Model model){
         String thesisId = req.getParameter("thesisId");
         thesisService.removeThesisById(Integer.valueOf(thesisId));
-        return StudentThesisList(req,resp,model);
+        return studentThesisList(req,resp,model);
     }
     //=============================教师相关操作=================================
     //获取论文模板列表
@@ -279,7 +283,7 @@ public class ThesisController {
         PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
         String method = req.getParameter("method");
         if("add".equals(method)){
-            pageNum = pm.getEndPage();
+            pageNum = pm.getStartPage();
         }else{
             //如果当前页大于总页数，但是排除查询不到数据的情况。当前页等于最大页
             if(pageNum > pm.getTotalPageNum() && pm.getTotalPageNum() != 0){
@@ -296,5 +300,99 @@ public class ThesisController {
         model.addAttribute("condition",condition);
         model.addAttribute("currentPage",pageNum);
         return "/teacher/thesisModelList";
+    }
+
+    //教师获取论文列表
+    @RequestMapping("/teacher/thesisList")
+    public String teacherThesisList(HttpServletRequest req, HttpServletResponse resp, Model model){
+        int pageNum = 1;
+        if(req.getParameter("currentPage") != null){
+            pageNum = Integer.valueOf(req.getParameter("currentPage"));
+        }
+        int pageSize = 5;
+        if(req.getParameter("pageSize") != null){
+            pageSize = Integer.valueOf(req.getParameter("pageSize"));
+        }
+        int searchType = -1;
+        if(req.getParameter("searchType") != null){
+            searchType = Integer.valueOf(req.getParameter("searchType"));
+        }
+        int searchCommitType = -1;
+        if(req.getParameter("searchCommitType") != null){
+            searchCommitType = Integer.valueOf(req.getParameter("searchCommitType"));
+        }
+        int searchSId = -1;
+        if(req.getParameter("searchSId") != null){
+            searchSId = Integer.valueOf(req.getParameter("searchSId"));
+        }
+        //获取登录者的id
+        HttpSession session = req.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("user");
+        int teacherId = Integer.valueOf(teacher.getId());
+        //查询老师名下的所有学生学习，并返回前台
+        List<Student> studentList = studentService.getStudentListByTId(teacherId);
+        Condition condition = new Condition();
+        condition.setType(searchType);
+        condition.setCommitType(searchCommitType);
+        condition.setTId(teacherId);
+        condition.setSId(searchSId);
+        int totalRecords = thesisService.getTeacherThesisCount(condition);
+        //不同操作，不同的当前页设置
+        PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
+        String method = req.getParameter("method");
+        if("add".equals(method)){
+            pageNum = pm.getStartPage();
+        }else{
+            //如果当前页大于总页数，但是排除查询不到数据的情况。当前页等于最大页
+            if(pageNum > pm.getTotalPageNum() && pm.getTotalPageNum() != 0){
+                pageNum = pm.getTotalPageNum();
+            }
+        }
+        PageModel pageModel = new PageModel(pageNum,totalRecords,pageSize);
+        //分页条件封装
+        condition.setCurrentPage(pageModel.getStartIndex());
+        condition.setPageSize(pageModel.getPageSize());
+        List<Thesis> thesisList = thesisService.getTeacherThesisList(condition);
+        model.addAttribute("thesisList",thesisList);
+        model.addAttribute("pm",pageModel);
+        model.addAttribute("studentList",studentList);
+        model.addAttribute("condition",condition);
+        model.addAttribute("currentPage",pageNum);
+        return "/teacher/thesisList";
+    }
+    //新增论文
+    @RequestMapping("/teacher/addTeacherThesis")
+    public String addTeacherThesis(HttpServletRequest req, HttpServletResponse resp, Model model){
+        Thesis thesis = Thesis.builder().build();
+        //论文备注
+        String thesisModelRemark = req.getParameter("thesisModelRemark");
+        //论文类型
+        int thesisModelType = Integer.valueOf(req.getParameter("thesisModelType"));
+        //论文上传地址
+        thesis.setThesisAddress("..........");
+        //论文所属学生
+        int studentId = Integer.valueOf(req.getParameter("sId"));
+        thesis.setSId(studentId);
+        //获取登录者的id
+        HttpSession session = req.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("user");
+        if(teacher.getId() != 0){
+            thesis.setTId(teacher.getId());
+        }
+        thesis.setType(thesisModelType);
+        thesis.setRemark(thesisModelRemark);
+        thesis.setCommitType(2);
+        //获取论文上传的最大次数
+        int count = thesisService.getMaxValue(thesis);
+        thesis.setCount(count + 1);
+        thesisService.addThesis(thesis);
+        return teacherThesisList(req, resp, model);
+    }
+    //删除论文
+    @RequestMapping("/teacher/deleteTeacherThesis")
+    public String deleteTeacherThesis(HttpServletRequest req, HttpServletResponse resp, Model model){
+        String thesisId = req.getParameter("thesisId");
+        thesisService.removeThesisById(Integer.valueOf(thesisId));
+        return teacherThesisList(req,resp,model);
     }
 }

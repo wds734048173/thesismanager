@@ -29,8 +29,13 @@ public interface ThesisMapper {
     public void deleteThesisById(int id);
     //新增论文
     public void insertThesis(Thesis thesis);
-    //查询论文列表（学生）
+    //学生查询论文列表
     public List<Thesis> selectStudentThesisList(Condition condition);
-    //查询论文数量（学生）
+    //学生查询论文数量
     public int selectStudentThesisCount(Condition condition);
+
+    //教师查询论文列表
+    public List<Thesis> selectTeacherThesisList(Condition condition);
+    //教师查询论文数量
+    public int selectTeacherThesisCount(Condition condition);
 }

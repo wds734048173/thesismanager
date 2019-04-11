@@ -35,4 +35,6 @@ public interface StudentMapper {
     public void updatePassword(Student student);
     //获取学生信息
     public Student selectStudent(Student student);
+    //通过老师id获取对应的学生列表
+    public List<Student> selectStudentListByTId(int tId);
 }

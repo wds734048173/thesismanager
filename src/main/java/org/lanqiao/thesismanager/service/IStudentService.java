@@ -29,4 +29,6 @@ public interface IStudentService {
     public void modifyPassword(Student student);
     //查询学生信息
     public Student getStudent(Student student);
+    //通过老师id查询所对应的学生列表
+    public List<Student> getStudentListByTId(int tId);
 }
