@@ -15,6 +15,7 @@
                 var telphone = $("#telphone").val().trim();
                 //邮箱
                 var email = $("#email").val().trim();
+                var thesisTitle = $("#thesisTitle").val();
                 if (realname.length > 20) {
                     alert("真实名称多于20字，请重新输入");
                     return;
@@ -27,7 +28,15 @@
                     alert("邮箱格式错误，请重新输入");
                     return;
                 }
-                var url = "/student/updateUser?realname=" + realname + "&sex=" + sex + "&telphone=" + telphone + "&email=" + email;
+                if(thesisTitle == null || thesisTitle == ""){
+                    alert("论文题目不能为空，请重新输入");
+                    return;
+                }
+                if (thesisTitle.trim().length < 5|| thesisTitle.trim().length > 50) {
+                    alert("论文题目不符合，请在5-50字符之间重新输入");
+                    return;
+                }
+                var url = "/student/updateUser?realname=" + realname + "&sex=" + sex + "&telphone=" + telphone + "&email=" + email + "&thesisTitle=" + thesisTitle;
                 $(".content").load(url);
             })
         })
@@ -63,6 +72,10 @@
             <div class="form-group row">
                 <label for="email" class="control-label">邮&nbsp;箱&nbsp;：</label>
                 <input type="email" name="email" id="email" required th:value="${session.user.email}">
+            </div>
+            <div class="form-group row">
+                <label for="thesisTitle" class="control-label">论文题目：</label>
+                <input type="text" name="thesisTitle" id="thesisTitle" required th:value="${session.user.thesisTitle}">
             </div>
             <div class="form-group row">
                 <label for="ctime" class="control-label">注册时间：</label>

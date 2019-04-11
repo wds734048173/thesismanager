@@ -174,6 +174,7 @@ public class StudentController {
     public String updateUser(HttpServletRequest req, HttpServletResponse resp, Model model){
         int id = ((Student)req.getSession().getAttribute("user")).getId();
         String realname = req.getParameter("realname");
+        String thesisTitle = req.getParameter("thesisTitle");
         int sex = Integer.valueOf(req.getParameter("sex"));
         String telphone = req.getParameter("telphone");
         String email = req.getParameter("email");
@@ -183,6 +184,7 @@ public class StudentController {
         student.setTelphone(telphone);
         student.setSex(sex);
         student.setRealname(realname);
+        student.setThesisTitle(thesisTitle);
         studentService.modifyStudent(student);
         //重新给session赋值
         HttpSession session = req.getSession();

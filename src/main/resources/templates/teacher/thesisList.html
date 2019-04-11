@@ -158,7 +158,7 @@
                     <div class="form-group">
                         <label for="sId" class="control-label">学生姓名:</label>
                         <select id="sId" name="sId" class="form-control">
-                            <option value="-1">全部</option>
+                            <option value="-1">--请选择--</option>
                             <option th:each="student:${studentList}" th:text="${student.realname}" th:value="${student.id}"></option>
                         </select>
                     </div>
