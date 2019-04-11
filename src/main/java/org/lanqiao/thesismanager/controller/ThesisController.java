@@ -42,7 +42,10 @@ public class ThesisController {
         if(req.getParameter("pageSize") != null){
             pageSize = Integer.valueOf(req.getParameter("pageSize"));
         }
-        int searchType = Integer.valueOf(req.getParameter("searchType"));
+        int searchType = -1;
+        if(req.getParameter("searchType") != null){
+            searchType = Integer.valueOf(req.getParameter("searchType"));
+        }
         Condition condition = new Condition();
         condition.setType(searchType);
         int totalRecords = thesisService.getThesisModelCount(condition);
@@ -119,7 +122,10 @@ public class ThesisController {
         if(req.getParameter("pageSize") != null){
             pageSize = Integer.valueOf(req.getParameter("pageSize"));
         }
-        int searchType = Integer.valueOf(req.getParameter("searchType"));
+        int searchType = -1;
+        if(req.getParameter("searchType") != null){
+            searchType = Integer.valueOf(req.getParameter("searchType"));
+        }
         Condition condition = new Condition();
         condition.setType(searchType);
         int totalRecords = thesisService.getThesisModelCount(condition);
