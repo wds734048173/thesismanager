@@ -11,7 +11,7 @@ import java.util.Map;
 public class DataMapUtil {
     private static Map<Integer,String> sexMap;
     private static Map<Integer,String> stateMap;
-//    private static Map<Integer,String> teacherMap;
+    private static Map<Integer,String> thesisTypeMap;
 
     //普通的状态
     public static Map<Integer,String> getStateMap(){
@@ -30,9 +30,14 @@ public class DataMapUtil {
         return sexMap;
     }
 
-    //指导老师
-    /*public static Map<Integer,String> getTeacherMap(){
-        teacherMap = new HashMap<Integer,String>();
-        return null;
-    }*/
+    //论文类型
+    public static Map<Integer,String> getThesisTypeMap(){
+        thesisTypeMap = new HashMap<Integer,String>();
+        thesisTypeMap.put(0,"课题申请表");
+        thesisTypeMap.put(1,"开题报告");
+        thesisTypeMap.put(2,"任务书");
+        thesisTypeMap.put(3,"中期报告");
+        thesisTypeMap.put(4,"毕业设计");
+        return thesisTypeMap;
+    }
 }

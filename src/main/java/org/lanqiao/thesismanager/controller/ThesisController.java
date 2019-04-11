@@ -4,6 +4,7 @@ import org.lanqiao.thesismanager.pojo.Condition;
 import org.lanqiao.thesismanager.pojo.Teacher;
 import org.lanqiao.thesismanager.pojo.Thesis;
 import org.lanqiao.thesismanager.service.IThesisService;
+import org.lanqiao.thesismanager.utils.MD5Utils;
 import org.lanqiao.thesismanager.utils.PageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,9 @@ public class ThesisController {
         if(req.getParameter("pageSize") != null){
             pageSize = Integer.valueOf(req.getParameter("pageSize"));
         }
+        int searchType = Integer.valueOf(req.getParameter("searchType"));
         Condition condition = new Condition();
+        condition.setType(searchType);
         int totalRecords = thesisService.getThesisModelCount(condition);
         //不同操作，不同的当前页设置
         PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
@@ -76,7 +79,12 @@ public class ThesisController {
         if(req.getParameter("pageSize") != null){
             pageSize = Integer.valueOf(req.getParameter("pageSize"));
         }
+        int searchType = -1;
+        if(req.getParameter("searchType") != null){
+            searchType = Integer.valueOf(req.getParameter("searchType"));
+        }
         Condition condition = new Condition();
+        condition.setType(searchType);
         int totalRecords = thesisService.getThesisModelCount(condition);
         //不同操作，不同的当前页设置
         PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
@@ -111,7 +119,9 @@ public class ThesisController {
         if(req.getParameter("pageSize") != null){
             pageSize = Integer.valueOf(req.getParameter("pageSize"));
         }
+        int searchType = Integer.valueOf(req.getParameter("searchType"));
         Condition condition = new Condition();
+        condition.setType(searchType);
         int totalRecords = thesisService.getThesisModelCount(condition);
         //不同操作，不同的当前页设置
         PageModel pm = new PageModel(pageNum,totalRecords,pageSize);
@@ -139,7 +149,7 @@ public class ThesisController {
     /**
      * 实现文件上传
      * */
-    @RequestMapping("fileUpload")
+   /* @RequestMapping("fileUpload")
     public String fileUpload(@RequestParam("fileName") MultipartFile file,HttpServletRequest req, HttpServletResponse resp, Model model){
         if(file.isEmpty()){
             return "false";
@@ -165,5 +175,29 @@ public class ThesisController {
             e.printStackTrace();
             return "false";
         }
+    }*/
+    @RequestMapping("/manager/addThesisModel")
+    public String addThesisModel(HttpServletRequest req, HttpServletResponse resp, Model model){
+        Thesis thesis = Thesis.builder().build();
+        //论文模板备注
+        String thesisModelRemark = req.getParameter("thesisModelRemark");
+        //论文模板类型
+        int thesisModelType = Integer.valueOf(req.getParameter("thesisModelType"));
+        //论文模板上传地址
+        thesis.setThesisAddress("..........");
+        thesis.setType(thesisModelType);
+        thesis.setRemark(thesisModelRemark);
+        //获取论文上传的最大次数
+        int count = thesisService.getMaxValue(thesis);
+        thesis.setCount(count + 1);
+        thesisService.addThesisModel(thesis);
+        return thesisModelManagerList(req, resp, model);
+    }
+
+    @RequestMapping("/manager/deleteThesisModel")
+    public String deleteThesisModel(HttpServletRequest req, HttpServletResponse resp, Model model){
+        String thesisId = req.getParameter("thesisId");
+        thesisService.removeThesisById(Integer.valueOf(thesisId));
+        return thesisModelManagerList(req,resp,model);
     }
 }

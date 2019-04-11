@@ -10,4 +10,10 @@ public interface IThesisService {
     public List<Thesis> getThesisModelList(Condition condition);
     //获取论文模板数量
     public int getThesisModelCount(Condition condition);
+    //获取上传次数的最大值
+    public int getMaxValue(Thesis thesis);
+    //上传论文模板
+    public void addThesisModel(Thesis thesis);
+    //删除论文
+    public void removeThesisById(int id);
 }

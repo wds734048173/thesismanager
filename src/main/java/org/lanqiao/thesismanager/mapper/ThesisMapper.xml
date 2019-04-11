@@ -3,17 +3,35 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.lanqiao.thesismanager.mapper.ThesisMapper">
-    <!--<insert id="insertTeacher" parameterType="org.lanqiao.thesismanager.pojo.Thesis">
-        insert into tb_teacher (username,password,realname,sex,telphone,email,state,ctime) values (#{username},#{password},#{realname},#{sex},#{telphone},#{email},#{state},now())
-    </insert>-->
+
+    <select id="selectMaxValue" parameterType="org.lanqiao.thesismanager.pojo.Thesis" resultType="int">
+        SELECT ifnull(MAX(count),0) FROM tb_thesis WHERE 1=1
+        <if test="tId != null">
+            AND tid = #{tId}
+        </if>
+        <if test="sId != null">
+            AND sid=#{sId}
+        </if>
+        AND type=#{type}
+    </select>
+    <insert id="insertThesisModel" parameterType="org.lanqiao.thesismanager.pojo.Thesis">
+        insert into tb_thesis (sid,thesisaddress,remark,count,state,type,ctime) values (0,#{thesisAddress},#{remark},#{count},0,#{type},now())
+    </insert>
     <select id="selectThesisModelList" resultType="org.lanqiao.thesismanager.pojo.Thesis" parameterType="org.lanqiao.thesismanager.pojo.Condition">
-        select * from tb_thesis where sid = 0 order by ctime desc
+        select * from tb_thesis where sid = 0 and state = 0
+        <if test="type != -1">
+            and type=#{type}
+        </if>
+        order by ctime desc
         <if test="currentPage != null">
             limit #{currentPage}, #{pageSize}
         </if>
     </select>
     <select id="selectThesisModelCount" resultType="int" parameterType="org.lanqiao.thesismanager.pojo.Condition">
-        select count(1) from tb_thesis where sid = 0
+        select count(1) from tb_thesis where sid = 0 and state = 0
+        <if test="type != -1">
+            and type=#{type}
+        </if>
     </select>
 
    <!-- <update id="updateTeacher" parameterType="org.lanqiao.thesismanager.pojo.Teacher">
@@ -29,8 +47,8 @@
     </update>
     <update id="disableTeacherById" parameterType="int">
         update tb_teacher set state=1,rtime=now() where id=#{id}
-    </update>
-    <update id="deleteTeacherById" parameterType="int">
-        update tb_teacher set state=2,rtime=now() where id=#{id}
     </update>-->
+    <update id="deleteThesisById" parameterType="int">
+        update tb_thesis set state=1,rtime=now() where id=#{id}
+    </update>
 </mapper>

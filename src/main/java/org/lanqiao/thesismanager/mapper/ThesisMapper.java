@@ -23,4 +23,8 @@ public interface ThesisMapper {
     public List<Thesis> selectThesisList();
     //获取所有学生的论文数量
     public List<Thesis> selectThesisCount();
+    //获取上传次数的最大值
+    public int selectMaxValue(Thesis thesis);
+    //删除论文（包括模板）
+    public void deleteThesisById(int id);
 }
