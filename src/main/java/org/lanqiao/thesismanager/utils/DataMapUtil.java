@@ -12,6 +12,7 @@ public class DataMapUtil {
     private static Map<Integer,String> sexMap;
     private static Map<Integer,String> stateMap;
     private static Map<Integer,String> thesisTypeMap;
+    private static Map<Integer,String> thesisCommitTypeMap;
 
     //普通的状态
     public static Map<Integer,String> getStateMap(){
@@ -39,5 +40,14 @@ public class DataMapUtil {
         thesisTypeMap.put(3,"中期报告");
         thesisTypeMap.put(4,"毕业设计");
         return thesisTypeMap;
+    }
+
+    //论文提交者
+    public static Map<Integer,String> getThesisCommitTypeMap(){
+        thesisCommitTypeMap = new HashMap<Integer,String>();
+        thesisCommitTypeMap.put(0,"管理员");
+        thesisCommitTypeMap.put(1,"学生");
+        thesisCommitTypeMap.put(2,"老师");
+        return thesisCommitTypeMap;
     }
 }

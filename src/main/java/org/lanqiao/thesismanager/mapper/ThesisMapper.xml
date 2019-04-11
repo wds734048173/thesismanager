@@ -5,20 +5,19 @@
 <mapper namespace="org.lanqiao.thesismanager.mapper.ThesisMapper">
 
     <select id="selectMaxValue" parameterType="org.lanqiao.thesismanager.pojo.Thesis" resultType="int">
-        SELECT ifnull(MAX(count),0) FROM tb_thesis WHERE 1=1
-        <if test="tId != null">
-            AND tid = #{tId}
+        SELECT ifnull(MAX(count),0) FROM tb_thesis WHERE type=#{type}
+        <if test="commitType == 0">
+            AND committype = #{commitType}
         </if>
-        <if test="sId != null">
-            AND sid=#{sId}
+        <if test="commitType != 0">
+            AND committype = #{commitType} AND sid = #{sId}
         </if>
-        AND type=#{type}
     </select>
     <insert id="insertThesisModel" parameterType="org.lanqiao.thesismanager.pojo.Thesis">
-        insert into tb_thesis (sid,thesisaddress,remark,count,state,type,ctime) values (0,#{thesisAddress},#{remark},#{count},0,#{type},now())
+        insert into tb_thesis (committype,thesisaddress,remark,count,state,type,ctime) values (0,#{thesisAddress},#{remark},#{count},0,#{type},now())
     </insert>
     <select id="selectThesisModelList" resultType="org.lanqiao.thesismanager.pojo.Thesis" parameterType="org.lanqiao.thesismanager.pojo.Condition">
-        select * from tb_thesis where sid = 0 and state = 0
+        select * from tb_thesis where committype = 0 and state = 0
         <if test="type != -1">
             and type=#{type}
         </if>
@@ -28,7 +27,7 @@
         </if>
     </select>
     <select id="selectThesisModelCount" resultType="int" parameterType="org.lanqiao.thesismanager.pojo.Condition">
-        select count(1) from tb_thesis where sid = 0 and state = 0
+        select count(1) from tb_thesis where committype = 0 and state = 0
         <if test="type != -1">
             and type=#{type}
         </if>
@@ -51,4 +50,54 @@
     <update id="deleteThesisById" parameterType="int">
         update tb_thesis set state=1,rtime=now() where id=#{id}
     </update>
+
+    <insert id="insertThesis" parameterType="org.lanqiao.thesismanager.pojo.Thesis">
+        insert into tb_thesis (committype,thesisaddress,remark,count,state,type,
+        <if test="tId != null">
+            tid,
+        </if>
+        <if test="sId != null">
+            sid,
+        </if>
+        ctime) values (#{commitType},#{thesisAddress},#{remark},#{count},0,#{type},
+        <if test="tId != null">
+            #{tId},
+        </if>
+        <if test="sId != null">
+            #{sId},
+        </if>
+        now())
+    </insert>
+
+    <select id="selectStudentThesisList" resultType="org.lanqiao.thesismanager.pojo.Thesis" parameterType="org.lanqiao.thesismanager.pojo.Condition">
+        select * from tb_thesis where state = 0 and sid = #{sId}
+        <if test="type != -1">
+            and type=#{type}
+        </if>
+        <if test="commitType != -1">
+            and committype=#{commitType}
+        </if>
+        <if test="commitType == -1">
+            and committype!=0
+        </if>
+        order by ctime desc
+        <if test="currentPage != null">
+            limit #{currentPage}, #{pageSize}
+        </if>
+    </select>
+    <select id="selectStudentThesisCount" resultType="int" parameterType="org.lanqiao.thesismanager.pojo.Condition">
+        select count(1) from tb_thesis where  state = 0 and sid = #{sId}
+        <if test="type != -1">
+            and type=#{type}
+        </if>
+        <if test="commitType != -1">
+            and committype=#{commitType}
+        </if>
+        <if test="commitType == -1">
+            and committype!=0
+        </if>
+    </select>
+  <!--  <insert id="insertThesis" parameterType="org.lanqiao.thesismanager.pojo.Thesis">
+        insert into tb_thesis (tid,sid,committype,thesisaddress,remark,count,state,type,ctime) values (#{tId},#{sId},#{commitType},#{thesisAddress},#{remark},#{count},0,#{type},now())
+    </insert>-->
 </mapper>

@@ -53,4 +53,32 @@ public class ThesisServiceImpl implements IThesisService {
     public void removeThesisById(int id) {
         thesisMapper.deleteThesisById(id);
     }
+
+    @Override
+    public List<Thesis> getStudentThesisList(Condition condition) {
+        List<Thesis> thesisList =  thesisMapper.selectStudentThesisList(condition);
+        Map<Integer,String> thesisTypeMap = DataMapUtil.getThesisTypeMap();
+        Map<Integer,String> thesisCommitTypeMap = DataMapUtil.getThesisCommitTypeMap();
+        for(Thesis thesis : thesisList){
+            int type = thesis.getType();
+            if(thesisTypeMap.containsKey(type)){
+                thesis.setTypeStr(thesisTypeMap.get(type));
+            }
+            int commitType = thesis.getCommitType();
+            if(thesisCommitTypeMap.containsKey(commitType)){
+                thesis.setCommitTypeStr(thesisCommitTypeMap.get(commitType));
+            }
+        }
+        return thesisList;
+    }
+
+    @Override
+    public int getStudentThesisCount(Condition condition) {
+        return thesisMapper.selectStudentThesisCount(condition);
+    }
+
+    @Override
+    public void addThesis(Thesis thesis) {
+        thesisMapper.insertThesis(thesis);
+    }
 }

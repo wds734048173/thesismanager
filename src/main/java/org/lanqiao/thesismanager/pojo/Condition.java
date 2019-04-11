@@ -23,10 +23,13 @@ public class Condition {
     private String realname;
     //学生id
     private int sId;
-    //学生id
+    //老师id
     private int tId;
     //论文类型
     private int type;
+    //论文提交者
+    private int commitType;
+    private String commitTypeStr;
     //分页
     private int currentPage;
     private  int pageSize;

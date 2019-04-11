@@ -27,4 +27,10 @@ public interface ThesisMapper {
     public int selectMaxValue(Thesis thesis);
     //删除论文（包括模板）
     public void deleteThesisById(int id);
+    //新增论文
+    public void insertThesis(Thesis thesis);
+    //查询论文列表（学生）
+    public List<Thesis> selectStudentThesisList(Condition condition);
+    //查询论文数量（学生）
+    public int selectStudentThesisCount(Condition condition);
 }

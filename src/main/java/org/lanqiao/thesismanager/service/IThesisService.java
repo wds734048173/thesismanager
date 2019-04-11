@@ -16,4 +16,10 @@ public interface IThesisService {
     public void addThesisModel(Thesis thesis);
     //删除论文
     public void removeThesisById(int id);
+    //学生获取论文列表
+    public List<Thesis> getStudentThesisList(Condition condition);
+    //学生获取论文数量
+    public int getStudentThesisCount(Condition condition);
+    //新增论文
+    public void addThesis(Thesis thesis);
 }
