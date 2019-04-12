@@ -1,7 +1,6 @@
 package org.lanqiao.thesismanager.service;
 
 import org.lanqiao.thesismanager.pojo.Condition;
-import org.lanqiao.thesismanager.pojo.Manager;
 import org.lanqiao.thesismanager.pojo.Student;
 
 import java.util.List;

@@ -6,21 +6,15 @@ import org.lanqiao.thesismanager.pojo.Teacher;
 import org.lanqiao.thesismanager.pojo.Thesis;
 import org.lanqiao.thesismanager.service.IStudentService;
 import org.lanqiao.thesismanager.service.IThesisService;
-import org.lanqiao.thesismanager.utils.MD5Utils;
 import org.lanqiao.thesismanager.utils.PageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**

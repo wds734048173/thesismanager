@@ -2,7 +2,6 @@ package org.lanqiao.thesismanager.service.impl;
 
 import org.lanqiao.thesismanager.mapper.StudentMapper;
 import org.lanqiao.thesismanager.mapper.TeacherMapper;
-import org.lanqiao.thesismanager.mapper.ThesisMapper;
 import org.lanqiao.thesismanager.pojo.Condition;
 import org.lanqiao.thesismanager.pojo.Student;
 import org.lanqiao.thesismanager.pojo.Teacher;

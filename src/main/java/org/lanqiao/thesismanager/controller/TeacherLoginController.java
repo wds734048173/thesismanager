@@ -1,11 +1,8 @@
 package org.lanqiao.thesismanager.controller;
 
-import org.lanqiao.thesismanager.pojo.Manager;
 import org.lanqiao.thesismanager.pojo.Teacher;
-import org.lanqiao.thesismanager.service.IManagerService;
 import org.lanqiao.thesismanager.service.ITeacherService;
 import org.lanqiao.thesismanager.utils.MD5Utils;
-import org.lanqiao.thesismanager.utils.VerifyCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 /**

@@ -1,7 +1,6 @@
 package org.lanqiao.thesismanager.controller;
 
 import org.lanqiao.thesismanager.pojo.Condition;
-import org.lanqiao.thesismanager.pojo.Student;
 import org.lanqiao.thesismanager.pojo.Teacher;
 import org.lanqiao.thesismanager.service.ITeacherService;
 import org.lanqiao.thesismanager.utils.MD5Utils;
