@@ -104,4 +104,9 @@ public class ThesisServiceImpl implements IThesisService {
     public int getTeacherThesisCount(Condition condition) {
         return thesisMapper.selectTeacherThesisCount(condition);
     }
+
+    @Override
+    public String getThesisUrl(int id) {
+        return thesisMapper.selectThesisUrl(id);
+    }
 }

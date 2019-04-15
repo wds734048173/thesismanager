@@ -135,4 +135,8 @@
   <!--  <insert id="insertThesis" parameterType="org.lanqiao.thesismanager.pojo.Thesis">
         insert into tb_thesis (tid,sid,committype,thesisaddress,remark,count,state,type,ctime) values (#{tId},#{sId},#{commitType},#{thesisAddress},#{remark},#{count},0,#{type},now())
     </insert>-->
+
+    <select id="selectThesisUrl" parameterType="int" resultType="string">
+        select thesisaddress from tb_thesis where id = #{id}
+    </select>
 </mapper>

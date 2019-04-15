@@ -38,4 +38,6 @@ public interface ThesisMapper {
     public List<Thesis> selectTeacherThesisList(Condition condition);
     //教师查询论文数量
     public int selectTeacherThesisCount(Condition condition);
+    //通过id获取论文地址
+    public String selectThesisUrl(int id);
 }

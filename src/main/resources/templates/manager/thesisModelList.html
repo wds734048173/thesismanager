@@ -158,9 +158,8 @@
             <td th:text="${thesis.ctime!=null}?${#dates.format(thesis.ctime, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${thesis.rtime!=null}?${#dates.format(thesis.rtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
-                <!--<a class="btn btn-default updateThesisModel" href="#" role="button"  name="updateThesisModel">修改</a>-->
                 <a class="btn btn-default deleteThesisModel" href="#" role="button"  name="deleteThesisModel">删除</a>
-                <a class="btn btn-default downloadThesisModel" href="#" role="button"  name="downloadThesisModel" >下载</a>
+                <a class="btn btn-default" th:href="@{/manager/download?(id=${thesis.id})}" role="button">下载</a>
             </td>
         </tr>
         </tbody>
@@ -175,7 +174,6 @@
                 <h4 class="modal-title" id="gridSystemModalLabel">上传模板文件</h4>
             </div>
             <div class="modal-body">
-                <!--<form method="post" action="/manager/fileUpload" id="addForm" enctype="multipart/form-data">-->
                 <form action="/manager/thesisModelUpload" id="addForm" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="thesisModelType" class="control-label">模板类型:</label>

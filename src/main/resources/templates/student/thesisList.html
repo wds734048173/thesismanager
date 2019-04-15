@@ -166,7 +166,7 @@
             <td th:text="${thesis.rtime!=null}?${#dates.format(thesis.rtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
                 <a class="btn btn-default deleteThesis" href="#" role="button"  name="deleteThesis" th:if="${thesis.commitType==1}">删除</a>
-                <a class="btn btn-default downloadThesisModel" href="#" role="button"  name="downloadThesisModel" >下载</a>
+                <a class="btn btn-default" th:href="@{/manager/download?(id=${thesis.id})}" role="button">下载</a>
             </td>
         </tr>
         </tbody>

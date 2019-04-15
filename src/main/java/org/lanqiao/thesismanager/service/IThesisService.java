@@ -26,4 +26,6 @@ public interface IThesisService {
     public List<Thesis> getTeacherThesisList(Condition condition);
     //教师获取论文数量
     public int getTeacherThesisCount(Condition condition);
+    //通过id获取论文地址
+    public String getThesisUrl(int id);
 }
