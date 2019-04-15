@@ -15,6 +15,7 @@ import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @Auther: WDS
@@ -39,7 +40,7 @@ public class FileUploadController {
      * */
     @RequestMapping("/manager/fileUpload")
     @ResponseBody
-    public Object fileUpload(@RequestParam("file") MultipartFile file){
+    public Object fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
         Map<String,String> map = new HashMap<>();
         if(file.isEmpty()){
             map.put("code","-1");
@@ -48,7 +49,14 @@ public class FileUploadController {
         String fileName = file.getOriginalFilename();
         int size = (int) file.getSize();
         System.out.println(fileName + "-->" + size);
-        String realname = "C:/Users/WDS/IdeaProjects/thesismanager/src/main/resources/static";
+        Properties properties = new Properties();
+        // 使用ClassLoader加载properties配置文件生成对应的输入流
+        InputStream in = FileUploadController.class.getClassLoader().getResourceAsStream("upload.properties");
+        // 使用properties对象加载输入流
+        properties.load(in);
+        //获取key对应的value值
+        String realname = properties.getProperty("uploadPath");
+//        String realname = "C:/Users/WDS/IdeaProjects/thesismanager/src/main/resources/static";
         String path = "/upload/" + new Date().getTime() + "/";
         //目标文件
         File dest = new File(realname + path + "/" + fileName);
@@ -77,10 +85,17 @@ public class FileUploadController {
 
     @RequestMapping("/manager/download")
     @ResponseBody
-    public String downLoad(HttpServletRequest req, HttpServletResponse response) throws UnsupportedEncodingException {
+    public String downLoad(HttpServletRequest req, HttpServletResponse response) throws IOException {
         int id = Integer.valueOf(req.getParameter("id"));
         String url = thesisService.getThesisUrl(id);
-        String realname = "C:/Users/WDS/IdeaProjects/thesismanager/src/main/resources/static";
+        Properties properties = new Properties();
+        // 使用ClassLoader加载properties配置文件生成对应的输入流
+        InputStream in = FileUploadController.class.getClassLoader().getResourceAsStream("upload.properties");
+        // 使用properties对象加载输入流
+        properties.load(in);
+        //获取key对应的value值
+        String realname = properties.getProperty("uploadPath");
+//        String realname = "C:/Users/WDS/IdeaProjects/thesismanager/src/main/resources/static";
         //截取最后一个\后面的所有字符
         String fileName = url.substring(url.lastIndexOf("\\")+1);
         if (fileName != null) {
