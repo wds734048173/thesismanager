@@ -49,15 +49,18 @@ public class FileUploadController {
         int size = (int) file.getSize();
         System.out.println(fileName + "-->" + size);
         String realname = "C:/Users/WDS/IdeaProjects/thesismanager/src/main/resources/static";
-        String path = realname + "/upload/" + new Date().getTime() + "/";
-        File dest = new File(path + "/" + fileName);
+        String path = "/upload/" + new Date().getTime() + "/";
+        //目标文件
+        File dest = new File(realname + path + "/" + fileName);
+        //保存数据库文件
+        File savePath = new File(path + "/" + fileName);
         if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
             dest.getParentFile().mkdirs();
         }
         try {
             file.transferTo(dest); //保存文件
             map.put("code","0");
-            map.put("url", URLEncoder.encode(dest.toString(),"utf-8"));
+            map.put("url", URLEncoder.encode(savePath.toString(),"utf-8"));
             return map;
         } catch (IllegalStateException e) {
             // TODO Auto-generated catch block
@@ -77,11 +80,12 @@ public class FileUploadController {
     public String downLoad(HttpServletRequest req, HttpServletResponse response) throws UnsupportedEncodingException {
         int id = Integer.valueOf(req.getParameter("id"));
         String url = thesisService.getThesisUrl(id);
+        String realname = "C:/Users/WDS/IdeaProjects/thesismanager/src/main/resources/static";
         //截取最后一个\后面的所有字符
         String fileName = url.substring(url.lastIndexOf("\\")+1);
         if (fileName != null) {
             //设置文件路径
-            File file = new File(url);
+            File file = new File(realname + url);
             if (file.exists()) {
                 response.reset(); // 非常重要
                 response.setContentType("application/force-download");// 设置强制下载不打开
@@ -100,6 +104,7 @@ public class FileUploadController {
                         os.write(buffer, 0, i);
                         i = bis.read(buffer);
                     }
+                    os.close();
                     return "下载成功";
                 } catch (Exception e) {
                     e.printStackTrace();
