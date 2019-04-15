@@ -11,10 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,37 +39,6 @@ public class ThesisController {
 
     @Autowired
     IStudentService studentService;
-    /**
-     * 实现文件上传
-     * */
-   /* @RequestMapping("fileUpload")
-    public String fileUpload(@RequestParam("fileName") MultipartFile file,HttpServletRequest req, HttpServletResponse resp, Model model){
-        if(file.isEmpty()){
-            return "false";
-        }
-        String fileName = file.getOriginalFilename();
-        int size = (int) file.getSize();
-        System.out.println(fileName + "-->" + size);
-
-        String path = "F:/test" ;
-        File dest = new File(path + "/" + fileName);
-        if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
-            dest.getParentFile().mkdir();
-        }
-        try {
-            file.transferTo(dest); //保存文件
-            return "true";
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return "false";
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return "false";
-        }
-    }*/
-
 
     //=============================管理员相关操作=================================
     //获取论文模板列表
@@ -105,14 +83,17 @@ public class ThesisController {
     }
     //新增论文模板
     @RequestMapping("/manager/addThesisModel")
-    public String addThesisModel(HttpServletRequest req, HttpServletResponse resp, Model model){
+    public String addThesisModel(HttpServletRequest req, HttpServletResponse resp, Model model) throws UnsupportedEncodingException {
         Thesis thesis = Thesis.builder().build();
-        //论文模板备注
-        String thesisModelRemark = req.getParameter("thesisModelRemark");
         //论文模板类型
         int thesisModelType = Integer.valueOf(req.getParameter("thesisModelType"));
+        //论文模板地址
+        String thesisModelAddress = URLDecoder.decode(req.getParameter("thesisModelAddress"),"utf-8");
+        //论文模板备注
+        String thesisModelRemark = req.getParameter("thesisModelRemark");
+
         //论文模板上传地址
-        thesis.setThesisAddress("..........");
+        thesis.setThesisAddress(thesisModelAddress);
         thesis.setType(thesisModelType);
         thesis.setRemark(thesisModelRemark);
         //获取论文上传的最大次数
@@ -221,14 +202,16 @@ public class ThesisController {
     }
     //新增论文
     @RequestMapping("/student/addStudentThesis")
-    public String addStudentThesis(HttpServletRequest req, HttpServletResponse resp, Model model){
+    public String addStudentThesis(HttpServletRequest req, HttpServletResponse resp, Model model) throws UnsupportedEncodingException {
         Thesis thesis = Thesis.builder().build();
         //论文模板备注
-        String thesisModelRemark = req.getParameter("thesisModelRemark");
+        String thesisRemark = req.getParameter("thesisRemark");
         //论文模板类型
-        int thesisModelType = Integer.valueOf(req.getParameter("thesisModelType"));
+        int thesisType = Integer.valueOf(req.getParameter("thesisType"));
+        //论文模板地址
+        String thesisAddress = URLDecoder.decode(req.getParameter("thesisAddress"),"utf-8");
         //论文模板上传地址
-        thesis.setThesisAddress("..........");
+        thesis.setThesisAddress(thesisAddress);
         //获取登录者的id
         HttpSession session = req.getSession();
         Student student = (Student) session.getAttribute("user");
@@ -238,8 +221,8 @@ public class ThesisController {
         if(student.getId() != 0){
             thesis.setSId(student.getId());
         }
-        thesis.setType(thesisModelType);
-        thesis.setRemark(thesisModelRemark);
+        thesis.setType(thesisType);
+        thesis.setRemark(thesisRemark);
         thesis.setCommitType(1);
         //获取论文上传的最大次数
         int count = thesisService.getMaxValue(thesis);
@@ -356,14 +339,16 @@ public class ThesisController {
     }
     //新增论文
     @RequestMapping("/teacher/addTeacherThesis")
-    public String addTeacherThesis(HttpServletRequest req, HttpServletResponse resp, Model model){
+    public String addTeacherThesis(HttpServletRequest req, HttpServletResponse resp, Model model) throws UnsupportedEncodingException {
         Thesis thesis = Thesis.builder().build();
         //论文备注
-        String thesisModelRemark = req.getParameter("thesisModelRemark");
+        String thesisRemark = req.getParameter("thesisRemark");
         //论文类型
-        int thesisModelType = Integer.valueOf(req.getParameter("thesisModelType"));
+        int thesisType = Integer.valueOf(req.getParameter("thesisType"));
+        //论文模板地址
+        String thesisAddress = URLDecoder.decode(req.getParameter("thesisAddress"),"utf-8");
         //论文上传地址
-        thesis.setThesisAddress("..........");
+        thesis.setThesisAddress(thesisAddress);
         //论文所属学生
         int studentId = Integer.valueOf(req.getParameter("sId"));
         thesis.setSId(studentId);
@@ -373,8 +358,8 @@ public class ThesisController {
         if(teacher.getId() != 0){
             thesis.setTId(teacher.getId());
         }
-        thesis.setType(thesisModelType);
-        thesis.setRemark(thesisModelRemark);
+        thesis.setType(thesisType);
+        thesis.setRemark(thesisRemark);
         thesis.setCommitType(2);
         //获取论文上传的最大次数
         int count = thesisService.getMaxValue(thesis);

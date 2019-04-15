@@ -2,6 +2,7 @@ package org.lanqiao.thesismanager.controller;
 
 import org.lanqiao.thesismanager.pojo.Manager;
 import org.lanqiao.thesismanager.service.IManagerService;
+import org.lanqiao.thesismanager.service.IThesisService;
 import org.lanqiao.thesismanager.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,9 @@ import javax.servlet.http.HttpSession;
 public class ManagerController {
     @Autowired
     IManagerService managerService;
+
+    @Autowired
+    IThesisService thesisService;
     //修改个人信息
     @RequestMapping("/manager/updateUser")
     public String updateUser(HttpServletRequest req, HttpServletResponse resp, Model model){
@@ -72,5 +76,4 @@ public class ManagerController {
         session.invalidate();
         return "/manager/login";
     }
-
 }

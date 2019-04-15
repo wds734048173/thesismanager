@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>学生论文列表</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webuploader/webuploader.css}">
+    <style>
+        #filePicker div{
+            width: 78px!important;
+            height: 37px!important;
+        }
+    </style>
+    <script type="text/javascript" th:src="@{/webuploader/webuploader.js}"></script>
     <script type="text/javascript">
         $(function () {
             //新增
@@ -14,16 +22,21 @@
             })
             //保存
             $("#save").click(function () {
-                //论文模板备注
-                var thesisModelRemark = $("#thesisModelRemark").val().trim();
-                //论文模板类型
-                var thesisModelType = $("#thesisModelType option:selected").val();
-                if(thesisModelRemark.length > 200){
-                    alert("论文模板备注多于200字，请重新输入");
+                //论文备注
+                var thesisRemark = $("#thesisRemark").val().trim();
+                //论文类型
+                var thesisType = $("#thesisType option:selected").val();
+                var thesisAddress = $("#thesisAddress").val();
+                if(thesisType == -1){
+                    alert("请选择论文类型");
                     return;
                 }
-                if(thesisModelType == -1){
-                    alert("请选择论文模板类型");
+                if(thesisAddress == null ||thesisAddress == ""){
+                    alert("请上传论文");
+                    return;
+                }
+                if(thesisRemark.length > 200){
+                    alert("论文备注多于200字，请重新输入");
                     return;
                 }
                 //查询条件
@@ -31,7 +44,7 @@
                 var searchCommitType = $("#searchCommitType option:selected").val();
                 var currentPage = $("#currentPage").val();
 
-                var url = "/student/addStudentThesis?thesisModelRemark="+thesisModelRemark+"&thesisModelType="+thesisModelType+"&method=add"
+                var url = "/student/addStudentThesis?thesisRemark="+thesisRemark+"&thesisType="+thesisType+"&thesisAddress="+thesisAddress+"&method=add"
                     +"&currentPage="+currentPage+"&searchType="+searchType+"&searchCommitType="+searchCommitType;
                 $(".content").load(url);
                 $(".modal-backdrop").remove();
@@ -65,6 +78,36 @@
             var url = "/student/thesisList?currentPage="+currentPage+"&searchType="+searchType+"&searchCommitType="+searchCommitType;
             $(".content").load(url);
         }
+
+        //文件上传插件
+        var uploader = WebUploader.create({
+            // swf文件路径
+            swf: 'localhost:8080/webuploader/Uploader.swf',
+            // 文件接收服务端。
+            server: '/manager/fileUpload',
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#filePicker',
+            // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+            resize: false
+        });
+        //文件选中后默认上传
+        uploader.onFileQueued = function(file) {
+            uploader.upload();
+            console.log(file.size);
+        }
+        //文件上传后返回的处理
+        uploader.on( 'uploadSuccess', function(file,res) {
+            console.log(res)
+            var thesisAddress = res.url;
+            $("#thesisAddress").val(thesisAddress);
+            alert("上传成功");
+        });
+
+        uploader.on( 'uploadError', function(file) {
+            alert("上传失败，请重新上传");
+            return;
+        });
     </script>
 </head>
 <body>
@@ -140,13 +183,9 @@
             <div class="modal-body">
                 <!--<form method="post" action="/manager/fileUpload" id="addForm" enctype="multipart/form-data">-->
                 <form method="post" action="" id="addForm">
-                    <div class="form-group hidden">
-                        <label for="thesisModelId" class="control-label">模板id:</label>
-                        <input type="text" class="form-control" id="thesisModelId" name="thesisModelId" value="">
-                    </div>
                     <div class="form-group">
-                        <label for="thesisModelType" class="control-label">模板类型:</label>
-                        <select id="thesisModelType" name="thesisModelType" class="form-control">
+                        <label for="thesisType" class="control-label">模板类型:</label>
+                        <select id="thesisType" name="thesisType" class="form-control">
                             <option value="-1">--请选择--</option>
                             <option value="0">课题申请表</option>
                             <option value="1">开题报告</option>
@@ -155,17 +194,17 @@
                             <option value="4">毕业设计</option>
                         </select>
                     </div>
-                    <!--<div class="form-group">
-                        <label for="filePicker" class="control-label">上传模板文件:</label>
-                        <div id="uploader-demo" CLASS="myinput">
-                            &lt;!&ndash;用来存放item&ndash;&gt;
-                            <div id="fileList" class="uploader-list"></div>
-                            <div id="filePicker">选择图片</div>
-                        </div>
-                    </div>-->
                     <div class="form-group">
-                        <label for="thesisModelRemark" class="control-label">论文备注:</label>
-                        <input type="text" class="form-control" id="thesisModelRemark" name="thesisModelRemark" required>
+                        <div id="uploader-demo">
+                            <!--用来存放item-->
+                            <div id="fileList" class="uploader-list"></div>
+                            <div id="filePicker">选择论文</div>
+                        </div>
+                        <input id="thesisAddress" type="hidden" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="thesisRemark" class="control-label">论文备注:</label>
+                        <input type="text" class="form-control" id="thesisRemark" name="thesisRemark" required>
                     </div>
                 </form>
                 <div class="modal-footer">
