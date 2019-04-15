@@ -73,16 +73,20 @@ public class FileUploadController {
     }
 
     @RequestMapping("/manager/download")
-    public String downLoad(HttpServletRequest req, HttpServletResponse response){
+    @ResponseBody
+    public String downLoad(HttpServletRequest req, HttpServletResponse response) throws UnsupportedEncodingException {
         int id = Integer.valueOf(req.getParameter("id"));
         String url = thesisService.getThesisUrl(id);
-        //截取最后一个/后面的所有字符(http://127.0.0.1:8080/cms/ReadAddress/1479805098158.jpg)
-        String fileName = url.substring(url.lastIndexOf("/")+1);
+        //截取最后一个\后面的所有字符
+        String fileName = url.substring(url.lastIndexOf("\\")+1);
         if (fileName != null) {
             //设置文件路径
             File file = new File(url);
             if (file.exists()) {
+                response.reset(); // 非常重要
                 response.setContentType("application/force-download");// 设置强制下载不打开
+                //采用中文文件名需要在此处转码
+                fileName = new String(fileName.getBytes("GB2312"),"ISO_8859_1");
                 response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
                 byte[] buffer = new byte[1024];
                 FileInputStream fis = null;
