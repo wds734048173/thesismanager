@@ -8,25 +8,27 @@
     </insert>
     <select id="selectStudentListByCondition" resultType="org.lanqiao.thesismanager.pojo.Student" parameterType="org.lanqiao.thesismanager.pojo.Condition">
         select * from tb_student
-        <where>
-            <if test="username != null &amp;&amp; username != ''">
-                and username like concat ('%', #{username}, '%')
+        <if test="condition != null">
+            <where>
+                <if test="username != null &amp;&amp; username != ''">
+                    and username like concat ('%', #{username}, '%')
+                </if>
+                <if test="realname != null &amp;&amp; realname != ''">
+                    and realname like concat ('%', #{realname}, '%')
+                </if>
+                <if test="state != -1">
+                    and state=#{state}
+                </if>
+                <if test="state == -1">
+                    and state!=2
+                </if>
+                <if test="tId != -1">
+                    and tid=#{tId}
+                </if>
+            </where>
+            <if test="currentPage != null">
+                limit #{currentPage}, #{pageSize}
             </if>
-            <if test="realname != null &amp;&amp; realname != ''">
-                and realname like concat ('%', #{realname}, '%')
-            </if>
-            <if test="state != -1">
-                and state=#{state}
-            </if>
-            <if test="state == -1">
-                and state!=2
-            </if>
-            <if test="tId != -1">
-                and tid=#{tId}
-            </if>
-        </where>
-        <if test="currentPage != null">
-            limit #{currentPage}, #{pageSize}
         </if>
     </select>
     <select id="selectStudentCountByCondition" resultType="int" parameterType="org.lanqiao.thesismanager.pojo.Condition">

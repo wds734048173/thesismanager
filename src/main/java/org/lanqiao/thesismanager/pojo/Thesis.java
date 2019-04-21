@@ -22,6 +22,7 @@ public class Thesis {
     private int tId;
     //学生id（0表示管理员上传的模板）
     private int sId;
+    private String sIdStr;
     //论文地址
     private String thesisAddress;
     //论文备注

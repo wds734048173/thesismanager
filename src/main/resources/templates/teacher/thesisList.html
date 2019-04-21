@@ -162,7 +162,8 @@
         <tr>
             <th hidden>ID</th>
             <th>论文类型</th>
-            <th>论文提交者</th>
+            <th>论文提交身份</th>
+            <th>学生名称</th>
             <th>论文第n次上传</th>
             <th>备注</th>
             <th>论文上传时间</th>
@@ -175,6 +176,7 @@
             <td th:text="${thesis.id}" hidden></td>
             <td th:text="${thesis.typeStr}"></td>
             <td th:text="${thesis.commitTypeStr}"></td>
+            <td th:text="${thesis.sIdStr}"></td>
             <td th:text="${thesis.count}"></td>
             <td th:text="${thesis.remark}"></td>
             <td th:text="${thesis.ctime!=null}?${#dates.format(thesis.ctime, 'yyyy-MM-dd HH:mm:ss')}"></td>
